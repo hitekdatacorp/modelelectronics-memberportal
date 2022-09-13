@@ -1,0 +1,27 @@
+.btn {
+  box-shadow: 2px 2px rgba(0,0,0,0.16);
+  font-family: "Inter-Bold";
+  font-size: 1.11rem;
+}
+
+.btn-dark {
+  background-color: $black;
+}
+
+.btn-with-caret{
+  &:after {
+    font-family: "Model-Icons";
+    content: '\e901';
+    display: inline-block;
+    font-size: 0.8em;
+    margin-left: 10px;
+    animation-duration: 0.4s;
+    animation-timing-function: $easeOutQuad;
+  }
+
+  &:hover {
+    &:after {
+      animation-name: caretSlideFromLeft;
+    }
+  }
+}

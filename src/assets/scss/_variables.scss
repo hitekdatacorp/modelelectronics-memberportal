@@ -1,0 +1,24 @@
+// Colors
+$primary: #C40000;
+$secondary: #0041A3;
+$model-dark-blue: #002050;
+$model-light-blue: #F0F4FA;
+$body-color: #000000;
+
+//Buttons
+$btn-border-radius: 3px;
+$btn-border-radius-sm: 3px;
+$btn-border-radius-lg: 3px;
+$btn-padding-y: 12px;
+$btn-padding-x: 20px;
+
+//Font
+$font-family-base: 'Inter-Regular', sans;
+$font-size-root: 18px;
+
+//Cntainers
+$container-max-widths: (sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1440px);

@@ -1,0 +1,375 @@
+.container-thin {
+  max-width: 1200px;
+}
+
+.container-super-thin {
+  max-width: 930px;
+}
+
+.container {
+  @include media-breakpoint-down(xl) {
+    max-width: 100%;
+  }
+}
+
+.children-100 {
+  > * {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.large-p {
+  font-size: 24px;
+
+  @include media-breakpoint-down (md) {
+    font-size: 21px;
+  }
+}
+
+.small-p {
+  font-size: 16px;
+}
+
+.checklist {
+  text-align: left !important;
+  list-style-type: none;
+  padding-left: 0;
+
+  li {
+    padding: 5px 0;
+    padding-left: 23px;
+    position: relative;
+    line-height: 1.2;
+
+    &:before {
+      content: '';
+      top: 0.5em;
+      left: 0;
+      display: block;
+      position: absolute;
+      background-image: url('../images/icon-check-blue.svg');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: 17px;
+      height: 13px;
+    }
+  }
+}
+
+.link-thick-underline {
+  position: relative;
+  text-decoration: none;
+  font-family: Inter-SemiBold;
+
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: $primary;
+    top: 100%;
+    left: 0;
+  }
+
+  &:hover {
+    &:after {
+      background-color: #9d0000;
+    }
+  }
+}
+
+.video-img {
+  box-shadow: 10px 10px 0 $secondary;
+  transition: all 0.2s $easeOutQuad;
+}
+
+.video-link {
+  position: relative;
+  transition: all 0.2s $easeOutQuad;
+
+  picture {
+    filter: brightness(1);
+    transition: all 0.3s ease;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    background-image: url('../images/icon-play-white.svg');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 70px;
+    height: 70px;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%) scale(1);
+    transition: all 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateX(-10px) translateY(-10px);
+
+    picture {
+      filter: brightness(0.8);
+    }
+
+    .video-img {
+      box-shadow: 20px 20px 0 $secondary;
+      transition: all 0.2s $easeOutQuad;
+    }
+
+    &:after {
+      transform: translateX(-50%) translateY(-50%) scale(1.2);
+    }
+  }
+}
+
+.img-with-text-cols-section {
+  padding: 80px 50px;
+
+  > .container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0;
+
+    >* {
+      width: 100%;
+    
+      @include media-breakpoint-up (lg) {
+        width: 50%;
+      }
+    }
+  }
+
+  &.img-right {
+    @include media-breakpoint-down (lg) {
+      >.container {
+        flex-direction: column-reverse;
+      }
+    }
+
+    .content-container {
+      padding-left: 0;
+      padding-right: 60px;
+    
+      @include media-breakpoint-down (xl) {
+        padding-left: 0;
+        padding-right: 45px;
+      }
+
+      @include media-breakpoint-down (lg) {
+        padding-right: 0;
+      }
+    }
+  }
+
+  
+  .content-container {
+    display: flex;
+    flex-direction: column;
+    padding-left: 60px;
+
+    a {
+      display: inline-flex;
+    }
+  
+    @include media-breakpoint-down (xl) {
+      padding-left: 45px;
+    }
+
+    @include media-breakpoint-up (md) {
+      justify-content: center;
+    }
+
+    @include media-breakpoint-down (lg) {
+      padding-right: 0;
+      padding-left: 0;
+      margin-top: 36px;
+    }
+  }
+
+  @include media-breakpoint-down (xxl) {
+    >.container:not(.container-super-thin) {
+      max-width: 100% !important;
+    }
+  }
+
+  @include media-breakpoint-down (lg) {
+    padding: 65px 36px;
+  }
+
+  @include media-breakpoint-down (sm) {
+    padding: 56px 30px;
+  }
+}
+
+
+//Carousel
+.carousel-indicators {
+  margin-bottom: 3rem;
+}
+
+.carousel-indicators [data-bs-target] {
+  box-sizing: content-box;
+  flex: 0 1 auto;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  margin-right: 3px;
+  margin-left: 3px;
+  text-indent: -999px;
+  cursor: pointer;
+  background-color: #CBCBCB;
+  background-clip: padding-box;
+  border: 1px solid $white;
+  border-radius: 50px;
+  opacity: 1;
+  transition: background-color 0.3s ease;
+}
+
+.carousel-indicators .active {
+  background-color: $primary;
+}
+
+//Secondary Page Hero
+.secondary-hero {
+  position: relative;
+
+  .container > div {
+    z-index: 1;
+  }
+
+  .content-container {
+    .title-large, h1 {
+      @include media-breakpoint-up(xl) {
+        font-size: 52px;
+      }
+    }
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 62%;
+    height: 100%;
+    background-color: $model-dark-blue;
+    z-index: 0;
+  }
+
+  @include media-breakpoint-down(lg) {
+    padding-top: 24px;
+
+    .image-container {
+      overflow: hidden;
+      height: 55vw;
+    }
+
+    &:before {
+      width: 100%;
+      height: 50%;
+      top: auto;
+      bottom: 0;
+    }
+  }
+}
+
+//breadcrumb
+.breadcrumb {
+  font-size: 13px;
+  color: #ACACAC;
+  padding: 0 50px;
+
+  > .container {
+    @include media-breakpoint-down (xl) {
+      max-width: 100%;
+    }
+  }
+
+  a {
+    color: #ACACAC;
+    text-decoration: none;;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  @include media-breakpoint-down(lg) {
+    font-size: 12px;
+    padding: 0 36px;
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding: 0 30px;
+  }
+}
+
+.has-overlay {
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    top: 0;
+    left: 0;
+    opacity: 0.65;
+    z-index: 0;
+  }
+}
+
+
+.boxed-list {
+  list-style-type: none;
+}
+
+.boxed-list-item {
+  position: relative;
+  margin-left: 0;
+  background-color: $white;
+  box-shadow: 0px 0px 16px rgba(0,0,0,0.16);
+  padding: 30px;
+  padding-left: 45px;
+  margin-bottom: 12px;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: $primary;
+  }
+
+  @include media-breakpoint-down(lg) {
+    padding: 28px;
+    padding-left: 40px;
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding: 24px;
+    padding-left: 30px;
+
+    &:before {
+      width: 7px
+    }
+  }
+}
