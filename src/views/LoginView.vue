@@ -26,7 +26,18 @@ async function login() {
 </script>
 
 <template>
-  <main>
-    <LoginForm v-model:customerNumber="customerNumber" v-model:password="password" @on-submit="login()" />
+  <main class="login-form">
+    <LoginForm v-model:customerNumber="customerNumber" 
+               v-model:password="password" 
+               @on-submit="login()" 
+               :show-register='false'
+               :show-social-icons="false"/>
   </main>
 </template>
+
+<style>
+ main.login-form {
+    max-width: 600px;    
+    padding-top: 2rem;
+ }
+</style>

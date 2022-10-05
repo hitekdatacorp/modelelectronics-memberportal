@@ -81,3 +81,45 @@ textarea,
     }
   }
 }
+
+
+.form-label {
+
+  text-align: left;
+  font: normal normal bold 1em/2.0em Inter-Bold;
+  letter-spacing: 0px;
+  color: #000000;
+
+  &.read-only {    
+    font: normal normal bold .75em/1.35em Inter-Bold;    
+    color: #6E7073;
+    text-transform: uppercase;
+    margin-bottom: 0;
+  }
+
+  &.req {
+    &::after {
+      content: '*';
+      margin-left: 3px;
+      color: $primary;
+    }
+  }
+}
+
+.form-section {
+  .form-section-header{
+    h4 {
+      text-align: left;
+    }
+    .over-score {
+      line-height: .5;
+    }
+  }
+
+  .label-postscript {
+    text-align: left;
+    font: italic normal normal 1em/4em Inter-Regular;
+    letter-spacing: 0px;
+    color: #6C6C6C;
+  }
+}

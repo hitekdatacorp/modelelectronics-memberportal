@@ -3,10 +3,17 @@
 import { stringLiteral } from '@babel/types';
 
 
-defineProps<{
-    customerNumber: string, 
-    password: string
-    }>();
+export interface LoginProps {
+    customerNumber: string,
+    password: string,
+    showRegister?: boolean,
+    showSocialIcons?: boolean
+}
+
+const props = withDefaults(defineProps<LoginProps>(), {
+    showRegister: true,
+    showSocialIcons: true
+});
 
 const emit = defineEmits<{
     (e: 'onSubmit'): void,
@@ -20,13 +27,17 @@ const emit = defineEmits<{
     <form>
         <!-- Email input -->
         <div class="form-outline mb-4">
-            <input type="text" id="form2Example1" class="form-control" :value="customerNumber" @input="$emit('update:customerNumber', ($event.target as HTMLInputElement).value)" />
+            <input type="text" id="form2Example1" class="form-control" :value="customerNumber"
+                @input="$emit('update:customerNumber', ($event.target as HTMLInputElement).value)"
+                autocomplete="username" />
             <label class="form-label" for="form2Example1">Customer Number</label>
         </div>
-        
+
         <!-- Password input -->
         <div class="form-outline mb-4">
-            <input type="password" id="form2Example2" class="form-control" :value="password" @input="$emit('update:password', ($event.target as HTMLInputElement).value)" />
+            <input type="password" id="form2Example2" class="form-control" :value="password"
+                @input="$emit('update:password', ($event.target as HTMLInputElement).value)"
+                autocomplete="current-password" />
             <label class="form-label" for="form2Example2">Password</label>
         </div>
 
@@ -51,23 +62,25 @@ const emit = defineEmits<{
 
         <!-- Register buttons -->
         <div class="text-center">
-            <p>Not a member? <a href="#!">Register</a></p>
-            <p>or sign up with:</p>
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <font-awesome-icon icon="fab fa-facebook" />                
-            </button>
+            <p v-if="showRegister">Not a member? <a href="#!">Register</a></p>
+            <div v-if="showSocialIcons">
+                <p>or sign up with:</p>
+                <button type="button" class="btn btn-link btn-floating mx-1">
+                    <font-awesome-icon icon="fab fa-facebook" />
+                </button>
 
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <font-awesome-icon icon="fab fa-google" />                
-            </button>
+                <button type="button" class="btn btn-link btn-floating mx-1">
+                    <font-awesome-icon icon="fab fa-google" />
+                </button>
 
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <font-awesome-icon icon="fab fa-twitter" />                
-            </button>
+                <button type="button" class="btn btn-link btn-floating mx-1">
+                    <font-awesome-icon icon="fab fa-twitter" />
+                </button>
 
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <font-awesome-icon icon="fab fa-github" />
-            </button>
+                <button type="button" class="btn btn-link btn-floating mx-1">
+                    <font-awesome-icon icon="fab fa-github" />
+                </button>
+            </div>
         </div>
     </form>
 </template>

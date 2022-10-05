@@ -98,3 +98,13 @@ h4,
     font-size: 19px;
   }
 }
+
+h5 {
+  font-size: 18px;  
+  line-height: 1.1;
+  color: $tertiary;
+
+  @include media-breakpoint-down (sm) {
+    font-size: 14px;
+  }
+}

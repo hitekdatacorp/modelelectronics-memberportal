@@ -27,8 +27,8 @@
   src: url('../fonts/model-icons.woff') format('woff2')
 }
 
-[class^="icon-"],
-[class*=" icon-"] {
+[class^="icon-model"],
+[class*=" icon-model"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'Model-Icons' !important;
   speak: never;
@@ -61,4 +61,27 @@
 .icon-model-clock:before {
   content: "\e903";
   color: inherit;
+}
+
+.icon-warning {  
+  display: inline-block;
+  background-image: url('../icons/icon-warning.svg');  
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 26px;
+  width: 29px;
+
+  // &:before {
+  //   content: '';
+  //   top: 0.5em;
+  //   left: 0;
+  //   display: block;
+  //   position: absolute;
+  //   background-image: url('../icons/icon-warning.svg');
+  //   background-position: center;
+  //   background-repeat: no-repeat;
+  //   background-size: contain;
+  //   width: 17px;
+  //   height: 13px;
+  // }
 }

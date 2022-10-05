@@ -16,7 +16,15 @@ const state: AuthStoreState = {
 
 const profileFromLocalStorage = localStorage.getItem('user');
 if(profileFromLocalStorage !== null){
-  state.profile = JSON.parse(profileFromLocalStorage);
+  const expiresUtcTimestamp = localStorage.getItem('user-expires');
+
+  if(expiresUtcTimestamp !== null) {
+
+    let expiresUtcDt = parseInt(expiresUtcTimestamp);
+    if(expiresUtcDt > new Date().getTime()) {
+      state.profile = JSON.parse(profileFromLocalStorage);
+    }
+  }
 }
 
 export const useAuthStore = defineStore({
@@ -45,6 +53,10 @@ export const useAuthStore = defineStore({
       // store user details and jwt in local storage to keep user logged in between page refreshes
       localStorage.setItem('user', JSON.stringify(this.profile));
 
+      let dt = new Date();
+      dt.setTime(dt.getTime() + (2 * 60 * 60 * 1000)); // add 4 hours to the current datetime. that's when it should expire
+      localStorage.setItem('user-expires', dt.getTime().toString());
+
       return authenticateResponse;
     },
 
@@ -55,7 +67,7 @@ export const useAuthStore = defineStore({
     authHeader(url: string) {
       // return auth header with jwt if user is logged in and request is to the api url
       const isLoggedIn = !!this.profile?.token;
-      const isApiUrl = url.startsWith(import.meta.env.VITE_API_URL);
+      const isApiUrl =  url.startsWith(import.meta.env.VITE_API_URL);
       if (isLoggedIn && isApiUrl) {
         return { Authorization: `Bearer ${this.profile?.token}` };
       } else {

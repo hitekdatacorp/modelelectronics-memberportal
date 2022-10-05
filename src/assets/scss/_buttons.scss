@@ -9,6 +9,7 @@
 }
 
 .btn-with-caret{
+
   &:after {
     font-family: "Model-Icons";
     content: '\e901';
@@ -19,9 +20,9 @@
     animation-timing-function: $easeOutQuad;
   }
 
-  &:hover {
+  &:hover {    
     &:after {
-      animation-name: caretSlideFromLeft;
+      animation-name: caretSlideFromLeft;      
     }
   }
 }

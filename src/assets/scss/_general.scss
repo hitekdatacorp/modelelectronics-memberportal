@@ -13,7 +13,7 @@
 }
 
 .children-100 {
-  > * {
+  >* {
     width: 100%;
     max-width: 100%;
     height: auto;
@@ -49,7 +49,7 @@
       left: 0;
       display: block;
       position: absolute;
-      background-image: url('../images/icon-check-blue.svg');
+      background-image: url('../icons/icon-check-blue.svg');
       background-position: center;
       background-repeat: no-repeat;
       background-size: contain;
@@ -99,7 +99,7 @@
   &:after {
     content: '';
     position: absolute;
-    background-image: url('../images/icon-play-white.svg');
+    background-image: url('../icons/icon-play-white.svg');
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -132,7 +132,7 @@
 .img-with-text-cols-section {
   padding: 80px 50px;
 
-  > .container {
+  >.container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -140,7 +140,7 @@
 
     >* {
       width: 100%;
-    
+
       @include media-breakpoint-up (lg) {
         width: 50%;
       }
@@ -157,7 +157,7 @@
     .content-container {
       padding-left: 0;
       padding-right: 60px;
-    
+
       @include media-breakpoint-down (xl) {
         padding-left: 0;
         padding-right: 45px;
@@ -169,7 +169,7 @@
     }
   }
 
-  
+
   .content-container {
     display: flex;
     flex-direction: column;
@@ -178,7 +178,7 @@
     a {
       display: inline-flex;
     }
-  
+
     @include media-breakpoint-down (xl) {
       padding-left: 45px;
     }
@@ -241,12 +241,14 @@
 .secondary-hero {
   position: relative;
 
-  .container > div {
+  .container>div {
     z-index: 1;
   }
 
   .content-container {
-    .title-large, h1 {
+
+    .title-large,
+    h1 {
       @include media-breakpoint-up(xl) {
         font-size: 52px;
       }
@@ -287,7 +289,7 @@
   color: #ACACAC;
   padding: 0 50px;
 
-  > .container {
+  >.container {
     @include media-breakpoint-down (xl) {
       max-width: 100%;
     }
@@ -295,7 +297,8 @@
 
   a {
     color: #ACACAC;
-    text-decoration: none;;
+    text-decoration: none;
+    ;
 
     &:hover {
       text-decoration: underline;
@@ -313,7 +316,7 @@
 }
 
 .has-overlay {
-  > * {
+  >* {
     position: relative;
     z-index: 1;
   }
@@ -340,7 +343,7 @@
   position: relative;
   margin-left: 0;
   background-color: $white;
-  box-shadow: 0px 0px 16px rgba(0,0,0,0.16);
+  box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.16);
   padding: 30px;
   padding-left: 45px;
   margin-bottom: 12px;
@@ -371,5 +374,92 @@
     &:before {
       width: 7px
     }
+  }
+}
+
+.part-card {
+  background: #F0F4FA 0% 0% no-repeat padding-box;
+  opacity: 1;
+  padding: 2rem;
+
+  .part-card-header {
+    hr {
+      height: 1px;
+      border: 1px solid #707070;
+      opacity: 0.22;
+      width: 100%;
+    }
+
+    h4 {
+      text-align: left;
+    }
+  }
+
+  .part-card-body {
+
+    font-size: 1.1rem;
+    label {
+      text-align: left;
+      font: normal normal bold .8rem/1.1rem Inter-Regular;
+      letter-spacing: 0px;
+      color: #000000;
+      text-transform: uppercase;
+      opacity: 0.54;
+    }
+    .part-image {
+      @include media-breakpoint-down(md) {
+        margin-top: .5rem;        
+        width: 100%;
+      }            
+    }
+    .price {
+      font-family: Inter-Bold;      
+    }
+  }
+}
+
+.notification-card {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 0px 16px #0000001a;
+  opacity: 1;
+  padding: 1rem .75rem;
+  display: flex;
+  align-items: center;
+
+  >div:first-child {
+    padding-right: .5rem;
+  }
+
+  div span {
+    text-align: left;
+    font-size: .9rem;
+    line-height: 1.25rem;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+  }
+}
+
+.svg-icon {
+  display: inline-block;
+  width: 1.1rem;
+  height: .9rem;
+  overflow: hidden;
+
+  >svg {
+    position: relative;
+  }
+}
+
+.req-label {
+  text-align: left;
+  font: normal normal normal 0.8rem/2.4rem Inter-Regular;
+  letter-spacing: 0px;
+  opacity: 1;
+
+  &::before {
+    content: '*';
+    margin-right: 2px;
+    color: $primary;
   }
 }
