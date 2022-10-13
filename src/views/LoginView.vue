@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import LoginForm from '@/components/LoginForm.vue'
-import { reactive, watch, ref } from 'vue'
-import { useToast } from "vue-toastification";
-import { useAuthStore } from '@/stores/auth-store';
-import router from '@/router'
+ import LoginForm from '@/components/LoginForm.vue'
+ import { reactive, watch, ref } from 'vue'
+ import { useToast } from "vue-toastification";
+ import { useAuthStore } from '@/stores/auth-store';
+ import router from '@/router'
 
-const toast = useToast();
-const store = useAuthStore();
+ const toast = useToast();
+ const store = useAuthStore();
 
 let customerNumber = ref('');
 let password = ref('');
-
+ 
 async function login() {
   console.debug(`Entered login method. customer number is ${customerNumber.value}. password is ${password.value}.`);
   // no try catch block needed because we handle our errors globally (see axios config)
@@ -20,13 +20,19 @@ async function login() {
   password.value = '';
 
   // go to member landing page which is the check stock view
-  router.push({name: 'checkstock'});
+  if(store.returnUrl){
+    console.debug('return url fullpath is: ' + store.returnUrl);
+    router.push(store.returnUrl);
+  } else {
+    router.push({name: 'checkstock'});
+  }
 }
-
+ 
 </script>
 
 <template>
   <main class="login-form">
+    
     <LoginForm v-model:customerNumber="customerNumber" 
                v-model:password="password" 
                @on-submit="login()" 

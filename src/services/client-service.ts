@@ -1,6 +1,6 @@
 
 import type { Client as Client, Gender } from '../types/models'
-import {http} from '@/main'
+import {http} from '@/helpers/axiosconfig'
 import axios from 'axios';
 
 

@@ -2,7 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import "@/assets/scss/modelelectronics.scss";
 import { useAuthStore } from '@/stores/auth-store';
-import { PUBLIC_SITE_URL } from '@/main';
+import { PUBLIC_SITE_URL } from '@/helpers/axiosconfig';
 import {useRoute} from 'vue-router';
 import { watch, ref } from 'vue';
 
@@ -13,7 +13,7 @@ let pageHeader = ref('');
 watch(() => route.meta.title, () => {
     document.title = route.meta.title as string;
     pageHeader.value = route.meta.title as string;
-})
+});
 
 </script>
 

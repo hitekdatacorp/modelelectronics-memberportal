@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { useAuthStore } from '@/stores/auth-store';
-import { myAppReference } from '@/main';
+//import { myAppReference } from '@/main';
 
 
 const router = createRouter({
@@ -174,7 +174,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
 
-  myAppReference.config.globalProperties.$Progress.start();
+  //myAppReference.config.globalProperties.$Progress.start();
 
   // redirect to login page if not logged in and trying to access a restricted page
   const publicPages = ['/login', '/', '/about'];
@@ -187,7 +187,7 @@ router.beforeEach(async (to) => {
 });
 
 router.afterEach(async (to, from) => {
-  myAppReference.config.globalProperties.$Progress.finish();
+  //myAppReference.config.globalProperties.$Progress.finish();
 });
 
 export default router

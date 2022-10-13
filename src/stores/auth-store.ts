@@ -33,7 +33,8 @@ export const useAuthStore = defineStore({
   getters: {
     customerNumber: (state) => state.profile?.customer?.friendlyCustomerNumber,
     name: (state) => state.profile?.customer?.name,
-    email: (state) => state.profile?.customer?.email    
+    email: (state) => state.profile?.customer?.email,
+    //returnUrl: (state) => state.returnUrl
   },  
   actions: {
     async fetchCustomer(customerNumber: string): Promise<CustomerModel> {
@@ -77,6 +78,7 @@ export const useAuthStore = defineStore({
 
     logout() {
       this.profile = null;
+      this.returnUrl = null;
       localStorage.removeItem('user');
       router.push('/login');
     },

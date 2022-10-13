@@ -1,6 +1,6 @@
 
 import { ItemAvailabilityResult } from '../types/models'
-import {http, httpWithoutInterceptors} from '@/main'
+import {http, httpWithoutInterceptors} from '@/helpers/axiosconfig'
 import axios from 'axios';
 import _ from 'lodash';
 

@@ -98,7 +98,7 @@ async function checkStock(e: Event) {
       <LoadingComponent v-if="isLoadingAlternates" view-box="0 0 300 500"></LoadingComponent>
       <div class="row pt-4" v-for="itemAvail in alternatesSearchResults">
         
-        <PartCard  :key="itemAvail.item?.itemNumber" v-bind:item-avail="itemAvail"></PartCard>
+        <PartCard  :key="itemAvail.item?.itemNumber" v-bind:item-avail="itemAvail" :show-purchase-and-exchange-buttons="true"></PartCard>
       </div>
 
     </div>
