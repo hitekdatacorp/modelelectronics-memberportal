@@ -1,3 +1,4 @@
+import type { OrderType } from "./enumtypes";
 
 
 export enum Gender {
@@ -154,12 +155,7 @@ export interface ItemAvailability {
     showRestrictedBulletin: boolean;
 }
 
-export enum OrderType {
-    Purchase = 1,
-    Exchange = 2,
-    Nissan = 3,
-    International = 4
-}
+
 
 export interface IItemAvailabilityResult extends IBaseItemAvailabilityResult{
     isOnBackorder: boolean;

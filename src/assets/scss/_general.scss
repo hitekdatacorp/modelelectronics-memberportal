@@ -463,3 +463,9 @@
     color: $primary;
   }
 }
+
+.error-msg {
+  color: var(--validation);
+  font-family: Inter-Bold;
+  
+}

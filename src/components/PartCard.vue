@@ -7,6 +7,7 @@ import router from '@/router';
 import NotificationCard from '../components/NotificationCard.vue';
 import OutOfStockIcon from '../components/OutOfStock.vue';
 import InStockIcon from '../components/InStock.vue';
+import { OrderType } from '@/types/enumtypes';
 
 type Props = {
     itemAvail: ItemAvailabilityResult | null,
@@ -57,11 +58,13 @@ let purchasePartPriceText = computed(() => {
 async function exchangePart() {
   console.log('transitioning to exchange order form.');
 
-  router.push({ name: 'order', params: { partNumber: itemAvail.value?.item?.itemNumber } });
+  router.push({ name: 'orderex', params: { partNumber: itemAvail.value?.item?.itemNumber, orderType: OrderType.Exchange } });
 }
 
 async function purchasePart() {
   console.log('transitioning to purchase order form.');
+
+  router.push({ name: 'orderpurch', params: { partNumber: itemAvail.value?.item?.itemNumber, orderType: OrderType.Purchase } });
 }
 
 

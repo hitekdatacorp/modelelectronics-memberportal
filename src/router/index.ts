@@ -86,15 +86,46 @@ const router = createRouter({
       children: [
         {
           // checkstock will be rendered inside AdvancedExchange <router-view>
-          // when /advexchange/checkstock is matched
-          path: 'checkstock',
-          name: 'checkstock',
-          props: true,
+          // when /advexchange is matched
+          path: '',
+          name: 'checkstock1',
+          props: false,
           component: () => import('../views/CheckStockView.vue')
         },
         {
-          path: 'order/:partNumber',
-          name: 'order',
+          // order will be rendered inside AdvancedExchange <router-view>
+          // when /advexchange/order is matched
+          path: 'order/:orderType/:partNumber',
+          name: 'orderex',
+          props: true,
+          component: () => import('../views/OrderView.vue')
+        }]
+    },
+    {
+      path: '/outrightpurchase',
+      name: 'outrightpurchase',
+      component: () => import('../views/OutrightPurchaseView.vue'),
+      meta: {
+        title: 'Outright Purchase',
+        metaTags: [
+          {
+            name: 'Outright Purchase',
+            content: 'Purchase a part outright for the full price with no part exchange'
+          }
+        ]
+      },
+      children: [
+        {
+          // checkstock will be rendered inside OutrightPurchase <router-view>
+          // when /outrightpurchase/checkstock is matched
+          path: '',
+          name: 'checkstock2',
+          props: false,
+          component: () => import('../views/CheckStockView.vue')
+        },
+        {
+          path: 'order/:orderType/:partNumber',
+          name: 'orderpurch',
           props: true,
           component: () => import('../views/OrderView.vue')
         }]
@@ -113,20 +144,7 @@ const router = createRouter({
         ]
       },
     },
-    {
-      path: '/outrightpurchase',
-      name: 'outrightpurchase',
-      component: () => import('../views/OutrightPurchaseView.vue'),
-      meta: {
-        title: 'Outright Purchase',
-        metaTags: [
-          {
-            name: 'Outright Purchase',
-            content: 'Purchase a part outright for the full price with no part exchange'
-          }
-        ]
-      },
-    },
+   
     {
       path: '/repairform',
       name: 'repairform',

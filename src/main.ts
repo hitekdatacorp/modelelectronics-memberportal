@@ -20,12 +20,15 @@ import "vue-toastification/dist/index.css";
 import VueProgressBar from "@aacassandra/vue3-progressbar";
 
 import Datepicker from '@vuepic/vue-datepicker';
+import  vfmPlugin from 'vue-final-modal'
+
 
 
 // create our vue app
 const app = createApp(App);
 app.use(createPinia());
 app.use(router);
+app.use(vfmPlugin);
 
 const progressBarOptions = {
     color: "#c40000",

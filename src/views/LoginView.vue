@@ -24,8 +24,8 @@ async function login() {
     console.debug('return url fullpath is: ' + store.returnUrl);
     router.push(store.returnUrl);
   } else {
-    router.push({name: 'checkstock'});
-  }
+    router.push({name: 'advancedexchange'});
+  } 
 }
  
 </script>

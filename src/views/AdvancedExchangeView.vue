@@ -21,7 +21,7 @@
     
     <template>
       <main class="adv-exchange">
-        <RouterView />
+        <RouterView /> 
       </main>
     </template>
     

@@ -72,7 +72,7 @@ watch(() => route.meta.title, () => {
                     <div class="collapse navbar-collapse" id="navbarToggler" v-if="store.isAuthenticated()">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <RouterLink class="nav-link" to="/advexchange/checkstock"><span>Advanced Exchange</span>
+                                <RouterLink class="nav-link" to="/advexchange"><span>Advanced Exchange</span>
                                 </RouterLink>
                             </li>
                             <li class="nav-item">
@@ -85,13 +85,13 @@ watch(() => route.meta.title, () => {
                             <li class="nav-item">
                                 <RouterLink class="nav-link" to="/repairform"><span>Repair Form</span></RouterLink>
                             </li>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <RouterLink class="nav-link" to="/radiosurvey"><span>Radio Survey</span></RouterLink>
                             </li>
                             <li class="nav-item">
                                 <RouterLink class="nav-link" to="/clustersurvey"><span>Cluster Survey</span>
                                 </RouterLink>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 </nav>

@@ -1,5 +1,6 @@
-export type OrderFormViewModel = {
 
+
+export type OrderFormViewModel = {        
     partNumber: string,
     dealershipName: string,
     dealershipCode: string,

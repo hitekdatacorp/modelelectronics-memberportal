@@ -1,15 +1,33 @@
-<template>
-  <main class="about">
-    <h1>This is the outright purchase page</h1>
-  </main>
-</template>
+<script setup lang="ts">
 
-<style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 50vh;
-    display: flex;
-    align-items: center;
+  import { reactive, watch, ref } from 'vue'
+  import { useToast } from "vue-toastification";
+  import { useAuthStore } from '@/stores/auth-store';
+  
+  const toast = useToast();
+  const store = useAuthStore();
+  
+  const item = reactive({
+    partNumber: '',
+    description: '',
+    price: ''
+  });
+  
+  async function checkStock() {
+    console.log('checking stock...');
   }
-}
-</style>
+  
+  </script>
+  
+  <template>
+    <main class="adv-exchange">
+      <RouterView  />
+    </main>
+  </template>
+  
+  
+  <style lang="scss">
+  main.adv-exchange {
+    // max-width: 900px;
+  }
+  </style>
