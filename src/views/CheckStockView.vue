@@ -63,7 +63,6 @@ async function checkStock(e: Event) {
   <main class="checkstock-form">
     <h4>Check Part Availability and Price</h4>
     <div class="container">
-
       <div class="row">
         <form @submit.prevent="checkStock">
           <div class="input-group mb-3">

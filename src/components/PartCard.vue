@@ -72,7 +72,7 @@ async function purchasePart() {
 
 
 <template>
-    <div class="part-card" v-if="itemAvail && itemAvail.item">
+    <div class="card part-card" v-if="itemAvail && itemAvail.item">
         <div class="part-card-header">
             <h4>Part # {{itemAvail.item.itemNumber}}</h4>
             <hr />

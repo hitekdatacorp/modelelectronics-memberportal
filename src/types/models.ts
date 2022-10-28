@@ -224,3 +224,23 @@ export interface SearchResult {
     count: number;
     item?: ItemAvailabilityResult | InternationalItemAvailabilityResult | NissanItemAvailabilityResult | null
 }
+
+
+
+
+export interface OrderModel {
+    orderDate: Date;
+    orderNumber: number;
+    dealerContact: string;
+    roNumber: string;
+    poNumber: string;
+    itemNumber: string;    
+    partDescription: string;
+    customerName: string;
+    shipDate: string | null;
+    trackingNumber: string;
+    status: string;
+    quantity: number | null;
+    price: number | null;
+    total: number | null;
+}

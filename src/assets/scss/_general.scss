@@ -377,11 +377,14 @@
   }
 }
 
-.part-card {
+.card {
   background: #F0F4FA 0% 0% no-repeat padding-box;
   opacity: 1;
   padding: 2rem;
+}
 
+.part-card {
+  
   .part-card-header {
     hr {
       height: 1px;

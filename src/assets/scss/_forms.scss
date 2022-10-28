@@ -82,10 +82,12 @@ textarea,
   }
 }
 
-
 .form-label {
-
   text-align: left;
+}
+
+.col-form-label,
+.form-label {  
   font: normal normal bold 1em/2.0em Inter-Bold;
   letter-spacing: 0px;
   color: #000000;

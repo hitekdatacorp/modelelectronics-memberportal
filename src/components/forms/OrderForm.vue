@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 
-import { computed, reactive, ref, toRef, watch  } from 'vue';
+import { computed, reactive, ref, toRef, watch, getCurrentInstance  } from 'vue';
 import type {PropType} from 'vue';
 
 import NotificationCard from '@/components/NotificationCard.vue';
@@ -12,6 +12,7 @@ import Datepicker from '@vuepic/vue-datepicker';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, helpers, maxLength, requiredIf, integer  } from '@vuelidate/validators';
 import { OrderType } from '@/types/enumtypes';
+import { dateTimeToShortDateString } from '@/helpers/formatters';
 
 const props = defineProps({
 
@@ -47,29 +48,32 @@ const props = defineProps({
 const emit = defineEmits<{
   (e: 'onSubmit', isFormValid: boolean): void,
   (e: 'onShowCoreMessage', showCore: boolean): void,
-  (e: 'update:contactName'): void,
-  (e: 'update:emailAddress'): void,
-  (e: 'update:phoneNumber'): void,
-  (e: 'update:customerName'): void,
-  (e: 'update:mileage'): void,
-  (e: 'update:vin'): void,
+  (e: 'update:contactName', v: string): void,
+  (e: 'update:emailAddress', v: string): void,
+  (e: 'update:phoneNumber', v: string): void,
+  (e: 'update:customerName', v: string): void,
+  (e: 'update:mileage', v: string): void,
+  (e: 'update:vin', v: string): void,
   (e: 'update:partNumberObtained', v: string): void,
   (e: 'update:isWarranty', v: boolean): void,
   (e: 'update:isCore', v: boolean): void,
   (e: 'update:isGoodwill', v: boolean): void,
-  (e: 'update:poNumber'): void,
-  (e: 'update:roNumber'): void,
+  (e: 'update:poNumber', v: string): void,
+  (e: 'update:roNumber', v: string): void,
   (e: 'update:serviceManagerFullName', v: string): void,
   (e: 'update:deliveryDate', v: Date | null): void,
   (e: 'update:hours', v: string): void,
-  (e: 'update:customerComplaint'): void,
-  (e: 'update:address'): void,
-  (e: 'update:city'): void,
+  (e: 'update:customerComplaint', v: string): void,
+  (e: 'update:address', v: string): void,
+  (e: 'update:city', v: string): void,
   (e: 'update:state', v: string): void,
-  (e: 'update:zip'): void,
-  (e: 'update:shippingMethod'): void,
-  (e: 'update:comments'): void,
+  (e: 'update:zip', v: string): void,
+  (e: 'update:shippingMethod', v: string): void,
+  (e: 'update:comments', v: string): void,
 }>();
+
+// Refs here
+const form = ref(null);
 
 async function onSubmitHandler(){
 
@@ -100,6 +104,7 @@ function updateIsGoodwillFieldHandler(v: boolean) {
 function updateDeliveryDateFieldHandler(modelData: string) {
   const dt = new Date(modelData);
   emit('update:deliveryDate', dt);
+  
 }
 
 function onStateSelectChangeHandler(v: string){
@@ -121,11 +126,7 @@ function updateIsCoreHandler(v: boolean){
 }
 
 const deliveryDateFormat = (date: Date) => {
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-
-  return `${month}/${day}/${year}`;
+  return dateTimeToShortDateString(date);
 }
 
 let calcShipDate = computed(() => {
@@ -156,16 +157,39 @@ let calcArrivalDate = computed(() => {
   return dt.format('dddd, MM/DD/YYYY');
 });
 
-function clearOrderFields(props: any) {
-  (Object.keys(props)).forEach(key => {
-    (props[key] as string) = '';
-  });
+function clearFields() {
+    
+  emit('update:contactName', '');
+  emit('update:emailAddress', '');
+  emit('update:phoneNumber', '');
+  emit('update:customerName', '');
+  emit('update:mileage', '');
+  emit('update:vin', '');
+  emit('update:partNumberObtained', '');
+  emit('update:isWarranty', false);
+  emit('update:isCore', false);
+  emit('update:isGoodwill', false);
+  emit('update:poNumber', '');
+  emit('update:roNumber', '');
+  emit('update:serviceManagerFullName','');
+  emit('update:deliveryDate', null);
+  emit('update:hours', '');
+  emit('update:customerComplaint', '');
+  emit('update:address', '');
+  emit('update:city', '');
+  emit('update:state', '');
+  emit('update:zip', '');
+  emit('update:shippingMethod', '');
+  emit('update:comments', '');
 }
 
-function clearForm() {
-  //console.debug(props);
+function clearForm() {  
+  if(form && form.value){
+    let htmlForm = form.value as HTMLFormElement;
+    htmlForm.reset();
+  } 
 
-  clearOrderFields(props);
+  clearFields();    
 }
 
 let deliveryDateRef = ref(props.deliveryDate);
@@ -225,7 +249,7 @@ const v$ = useVuelidate(rules, props);
 <template>
 
 
-  <form @submit.prevent="onSubmitHandler">
+  <form @submit.prevent="onSubmitHandler" ref="form">
     <div class="form-section">
       <div class="form-section-header">
         <div class="over-score">&nbsp;</div>

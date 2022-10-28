@@ -135,10 +135,10 @@ const router = createRouter({
       name: 'invoicehistory',
       component: () => import('../views/InvoiceHistoryView.vue'),
       meta: {
-        title: 'Invoice History',
+        title: 'Invoice Copies',
         metaTags: [
           {
-            name: 'Invoice History',
+            name: 'Invoice Copies',
             content: 'View invoice history for sales and exchanges including tracking information'
           }
         ]

@@ -56,7 +56,7 @@ let purchasePartPriceText = computed(() => {
 
 
 <template>
-    <div class="part-card" v-if="itemAvail && itemAvail.item" style="font-size: 0.8rem !important; background-color: #fff;" >
+    <div class="card part-card" v-if="itemAvail && itemAvail.item" style="font-size: 0.8rem !important; background-color: #fff; margin-top: 3px;" >
         <div class="part-card-header">
             <div class="row">
                 <div class="col-12 pb-3 d-flex justify-content-center">

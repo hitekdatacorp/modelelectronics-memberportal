@@ -100,6 +100,10 @@ let purchasePartPriceText = computed(() => {
 
 function placeOrder(isFormValid: boolean) {
 
+  console.debug('order being placed...');
+  console.debug('current order Model: ');
+  console.debug(order);
+
   if (!isFormValid) {
     console.log('form is not valid');
     return;
@@ -110,9 +114,7 @@ function placeOrder(isFormValid: boolean) {
     return;
   }
 
-  console.debug('order being placed...');
-  console.debug('current order Model: ');
-  console.debug(order);
+  
 
   isLoading.value = true;
   setTimeout(() => {

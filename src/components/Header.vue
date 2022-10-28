@@ -85,13 +85,13 @@ watch(() => route.meta.title, () => {
                             <li class="nav-item">
                                 <RouterLink class="nav-link" to="/repairform"><span>Repair Form</span></RouterLink>
                             </li>
-                            <!-- <li class="nav-item">
+                            <li class="nav-item">
                                 <RouterLink class="nav-link" to="/radiosurvey"><span>Radio Survey</span></RouterLink>
                             </li>
                             <li class="nav-item">
                                 <RouterLink class="nav-link" to="/clustersurvey"><span>Cluster Survey</span>
                                 </RouterLink>
-                            </li> -->
+                            </li>
                         </ul>
                     </div>
                 </nav>
