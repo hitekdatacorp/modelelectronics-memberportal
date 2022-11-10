@@ -125,3 +125,7 @@ textarea,
     color: #6C6C6C;
   }
 }
+
+.form-check-input[type=radio], .form-check-input[type=checkbox] {
+  margin-right: 10px;
+}

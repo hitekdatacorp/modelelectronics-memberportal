@@ -13,6 +13,7 @@ import { useVuelidate } from '@vuelidate/core';
 import { required, email, helpers, maxLength, requiredIf, integer  } from '@vuelidate/validators';
 import { OrderType } from '@/types/enumtypes';
 import { dateTimeToShortDateString } from '@/helpers/formatters';
+import {usPhoneNumber, vinNumber} from '@/helpers/validators';
 
 const props = defineProps({
 
@@ -194,17 +195,6 @@ function clearForm() {
 
 let deliveryDateRef = ref(props.deliveryDate);
 
-// customer US phone number validation
-const regexPhone = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
-const usPhoneNumber = (phone: string) => {  
-  let isValid = regexPhone.test(phone);
-  return isValid;
-}
-
-const vinRegex = /^[a-hj-npr-z0-9\-]{17}/im
-const vinNumber = (vin: string) => {  
-  return vinRegex.test(vin);
-}
 
 
 // setup form validation
@@ -216,7 +206,7 @@ const rules = {
     phoneNumber: helpers.withMessage('Not a valid phone number', usPhoneNumber)
   },
   customerName: {required, maxLength: maxLength(255)},
-  mileage: {required, integer: helpers.withMessage('Mileage must be a valid number', integer) },
+  mileage: {required, integer: helpers.withMessage('Mileage must be a valid number. Please remove any commas or decimals or any other special character', integer) },
   vin: {vinNumber: helpers.withMessage('Not a valid VIN number', vinNumber)},
   partNumberObtained: {required},
   roNumber: { requiredIfWarranty: helpers.withMessage('RO# is required when Warranty Exchange is Yes', requiredIf(() => props.isWarranty)) },
