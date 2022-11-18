@@ -62,12 +62,17 @@ export class CustomerModel {
     phone: string;
     contactName: string;
     email: string;
+
+    address: string;
+    city: string;
     state: string;
+    zip: string;
     salesTerritory: string;
     salesRep: string;
     dealerManufacturer: string;
 
-    constructor(customerNumber: string, friendlyCustomerNumber: string, name: string, phone: string, contactName: string, email: string, state: string, salesTerritory: string, salesRep: string, dealerManufacturer: string) {
+    constructor(customerNumber: string, friendlyCustomerNumber: string, name: string, phone: string, contactName: string, email: string, 
+        address:string, city: string, state: string, zip: string, salesTerritory: string, salesRep: string, dealerManufacturer: string) {
         this.customerNumber = customerNumber;
         this.friendlyCustomerNumber = friendlyCustomerNumber;
         this.name = name;
@@ -75,7 +80,10 @@ export class CustomerModel {
         this.phone = phone;
         this.contactName = contactName;
         this.email = email;
+        this.address = address;
+        this.city = city;
         this.state = state;
+        this.zip = zip;
         this.salesTerritory = salesTerritory;
         this.salesRep = salesRep;
         this.dealerManufacturer = dealerManufacturer;
@@ -105,10 +113,11 @@ export interface ItemModel {
     itemStatus: string;
     itemType: string;
     productCategory: string;
-    userDefinedDescription2: string;
+    partType: string;
     price: number | null;
     retailPrice: number | null;
     replacementCost: number | null;
+    itemStatusDescription: string | null;
 }
 
 export interface IBaseItemAvailabilityResult {
@@ -117,6 +126,7 @@ export interface IBaseItemAvailabilityResult {
     remanNumber: string;
     yearRange: string;
     alternateItems: string[];
+    isRadio: boolean
 }
 
 export class BaseItemAvailabilityResult {
@@ -125,19 +135,22 @@ export class BaseItemAvailabilityResult {
     remanNumber: string;
     yearRange: string;
     alternateItems: string[];
+    isRadio: boolean;
 
     constructor(
         item: ItemModel,
         itemExists: boolean,
         remanNumber: string,
         yearRange: string,
-        alternateItems: string[]
+        alternateItems: string[],
+        isRadio: boolean
     ) {
         this.item = item
         this.itemExists = itemExists
         this.remanNumber = remanNumber
         this.yearRange = yearRange
         this.alternateItems = alternateItems
+        this.isRadio = isRadio
     }
 }
 
@@ -193,8 +206,9 @@ export class ItemAvailabilityResult extends BaseItemAvailabilityResult implement
         exchangeAvailability: ItemAvailability,
         purchaseAvailability: ItemAvailability,
         mileageToBeSetAtDealership: boolean,
+        isRadio: boolean
     ) {
-        super(item, itemExists, remanNumber, yearRange, alternateItems)
+        super(item, itemExists, remanNumber, yearRange, alternateItems, isRadio)
         this.isOnBackorder = isOnBackorder
         this.estimatedDeliveryDate = estimatedDeliveryDate
         this.exchangeAvailability = exchangeAvailability
@@ -226,9 +240,8 @@ export interface SearchResult {
 }
 
 
+export interface IInvoiceHistoryModel {
 
-
-export interface OrderModel {
     orderDate: Date;
     orderNumber: number;
     dealerContact: string;
@@ -243,4 +256,32 @@ export interface OrderModel {
     quantity: number | null;
     price: number | null;
     total: number | null;
+
+    coreReturnedDate: Date | null;    
+}
+
+export interface IOrderModel {
+
+    id: number;
+    orderDate: string;
+    orderTime: string;
+    dealerCode: string | null;
+    dealerName: string | null;
+    contactName: string | null;
+    email: string | null;
+    customerName: string | null;
+    roNumber: string | null;
+    poNumber: string | null;
+    partNumber: string | null;
+    wnum: string | null;
+    complaint: string | null;
+    deliveryDate: string | null;
+    vin: string | null;
+    tacCaseNumber: string | null;
+    mileage: number | null;
+}
+
+
+export interface CreateOrderResult {
+    orderId: number;
 }

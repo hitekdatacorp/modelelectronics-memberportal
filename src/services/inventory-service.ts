@@ -10,7 +10,7 @@ export async function getItemAvailability(partNumber: string): Promise<ItemAvail
         const { data, status } = await http.get<ItemAvailabilityResult>(`inventory/${partNumber}/avail`);
         console.debug(`getItemAvailability returned status: ${status}`);
 
-        const result = new ItemAvailabilityResult(data.item, data.itemExists, data.remanNumber, data.yearRange, data.alternateItems, data.isOnBackorder, data.estimatedDeliveryDate, data.exchangeAvailability, data.purchaseAvailability, data.mileageToBeSetAtDealership);
+        const result = new ItemAvailabilityResult(data.item, data.itemExists, data.remanNumber, data.yearRange, data.alternateItems, data.isOnBackorder, data.estimatedDeliveryDate, data.exchangeAvailability, data.purchaseAvailability, data.mileageToBeSetAtDealership, data.isRadio);
 
         return result;
     } catch (error) {

@@ -2,7 +2,6 @@
 
 import { toNumber } from 'lodash';
 import { reactive, watch, ref, computed } from 'vue'
-import router from '@/router';
 import { useToast } from "vue-toastification";
 import { useAuthStore } from '@/stores/auth-store';
 import type { ItemAvailabilityResult } from '@/types/models';
@@ -32,7 +31,6 @@ async function checkStock(e: Event) {
   isLoading.value = true;
   try {
     let itemResult = await getItemAvailability(partNumberSearchText.value);
-
     showSearchResult.value = true;
     searchResult.value = itemResult;
 
@@ -68,7 +66,7 @@ async function checkStock(e: Event) {
           <div class="input-group mb-3">
             <!-- <label for="partNumber" class="form-label">Part Number</label> -->
             <input type="text" class="form-control" id="partNumber" aria-describedby="partNumberHelp"
-              aria-label="Enter a part number" v-model="partNumberSearchText" placeholder="Enter a part number" />
+              aria-label="Enter a part number" v-model="partNumberSearchText" :placeholder="!store.isNissanDealer ? 'Enter a part number' : '(Include Hyphen in Part #. Eg:24820-75P03)'" />
             <input type="submit" class="btn btn-primary input-group-text" value="Search" />
           </div>
         </form>

@@ -1,15 +1,89 @@
 
-import type {OrderModel} from '../types/models';
+import type {CreateOrderResult, IInvoiceHistoryModel, IOrderModel} from '../types/models';
 import {http, httpWithoutInterceptors} from '@/helpers/axiosconfig'
 import axios from 'axios';
 import _ from 'lodash';
 import { dateToUrlReadyParam } from '@/helpers/formatters';
 import { OrderType } from '@/types/enumtypes';
+import type { InternationalOrderFormViewModel, NissanOrderFormViewModel, OrderFormViewModel } from '@/types/viewmodels';
 
 
-export async function getOrderHistory(orderType: OrderType, customerNumber: string, orderDateFrom?: Date | null, orderDateTo?: Date | null, orderNumber?: string | null, poNumber?: string | null, customerName?: string | null): Promise<Array<OrderModel>> {    
+export async function createOrder(order: OrderFormViewModel): Promise<CreateOrderResult> {                    
 
-    let url = `orders/${customerNumber}/?orderType=${orderType}&`;
+    try {        
+        const { data, status } = await http.post<CreateOrderResult>('orders', order);
+        console.debug(`createOrder returned status: ${status}`);
+
+       return data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            return Promise.reject(error.message);
+        } else {
+            console.log('unexpected error: ', error);
+            return Promise.reject('An unexpected error occurred');
+        }
+    }    
+}
+
+
+export async function createNissanOrder(order: NissanOrderFormViewModel): Promise<CreateOrderResult> {                    
+
+    try {        
+        const { data, status } = await http.post<CreateOrderResult>('orders/nissan', order);
+        console.debug(`createOrder returned status: ${status}`);
+
+       return data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            return Promise.reject(error.message);
+        } else {
+            console.log('unexpected error: ', error);
+            return Promise.reject('An unexpected error occurred');
+        }
+    }    
+}
+
+export async function createInternationalOrder(order: InternationalOrderFormViewModel): Promise<CreateOrderResult> {                    
+
+    try {        
+        const { data, status } = await http.post<CreateOrderResult>('orders/intl', order);
+        console.debug(`createOrder returned status: ${status}`);
+
+       return data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            return Promise.reject(error.message);
+        } else {
+            console.log('unexpected error: ', error);
+            return Promise.reject('An unexpected error occurred');
+        }
+    }    
+}
+
+
+export async function getOrder(orderId: number): Promise<IOrderModel> {    
+    try {
+        const { data, status } = await http.get<IOrderModel>(`orders/${orderId}`);
+        console.debug(`getOrder returned status: ${status}`);        
+
+        return data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            return Promise.reject(error.message);
+        } else {
+            console.log('unexpected error: ', error);
+            return Promise.reject('An unexpected error occurred');
+        }
+    }    
+}
+
+export async function getOrderHistory(orderType: OrderType, customerNumber: string, orderDateFrom?: Date | null, orderDateTo?: Date | null, orderNumber?: string | null, poNumber?: string | null, customerName?: string | null): Promise<Array<IInvoiceHistoryModel>> {    
+
+    let url = `orders/customerhistory/${customerNumber}/?orderType=${orderType}&`;
 
     if(orderDateFrom) {
         url += `startDate=${dateToUrlReadyParam(orderDateFrom)}&`;
@@ -29,7 +103,7 @@ export async function getOrderHistory(orderType: OrderType, customerNumber: stri
 
 
     try {
-        const { data, status } = await http.get<Array<OrderModel>>(url);
+        const { data, status } = await http.get<Array<IInvoiceHistoryModel>>(url);
         console.debug(`getOrderHistory returned status: ${status}`);
 
        return data;

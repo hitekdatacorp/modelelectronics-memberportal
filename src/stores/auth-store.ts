@@ -1,8 +1,12 @@
 
+import { DealerRoles } from '@/types/enumtypes';
 import { defineStore } from 'pinia'
+import { useRouter } from 'vue-router';
 import * as customerService from '../services/customer-service'
 import { UserProfile, CustomerModel, AuthenticateResponse } from '../types/models'
-import router from '@/router'
+
+
+const router = useRouter();
 
 type AuthStoreState = {
   profile: UserProfile | null,
@@ -34,6 +38,26 @@ export const useAuthStore = defineStore({
     customerNumber: (state) => state.profile?.customer?.friendlyCustomerNumber,
     name: (state) => state.profile?.customer?.name,
     email: (state) => state.profile?.customer?.email,
+    phone: (state) => state.profile?.customer?.phone,
+    address: (state) => state.profile?.customer?.address,
+    city: (state) => state.profile?.customer?.city,
+    state: (state) => state.profile?.customer?.state,
+    zip: (state) => state.profile?.customer?.zip,
+    isGMDealer: () => {
+      return state.profile?.customer?.dealerManufacturer === DealerRoles.GM;
+    },
+    isNissanDealer: () => {
+      return state.profile?.customer?.dealerManufacturer === DealerRoles.NissanInfiniti;
+    },
+    isInternationalDealer: () => {
+      return state.profile?.customer?.dealerManufacturer === DealerRoles.International;
+    },
+    isOtherDealer() {
+      return !this.isGMDealer && !this.isNissanDealer && !this.isInternationalDealer;
+    },
+    isGMOrOtherDealer(){
+      return this.isGMDealer || this.isOtherDealer;
+    }
     //returnUrl: (state) => state.returnUrl
   },  
   actions: {
@@ -80,7 +104,12 @@ export const useAuthStore = defineStore({
       this.profile = null;
       this.returnUrl = null;
       localStorage.removeItem('user');
-      router.push('/login');
+      if(router !== null && router !== undefined){
+        router.push('/');
+      } else {
+        // try the window object
+        window.location.href = '/';
+      }
     },
 
     setReturnUrl(url: string) {

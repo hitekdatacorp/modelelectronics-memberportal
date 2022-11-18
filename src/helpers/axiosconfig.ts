@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useToast } from 'vue-toastification';
 import _ from 'lodash';
+import { useAuthStore } from '@/stores/auth-store';
 
 
 // const WEB_API_SERVICE_URL = 'https://localhost:7228/';
@@ -24,8 +25,8 @@ http.interceptors.request.use( config => {
    // app.config.globalProperties.$Progress.start(); // for every request start  the progress bar    
 
     if(config && config.url && config.headers) {
-        //const authStore = useAuthStore();
-        //config.headers['Authorization'] = authStore.authHeader(config.baseURL!)['Authorization'] || '';
+        const authStore = useAuthStore();
+        config.headers['Authorization'] = authStore.authHeader(config.baseURL!)['Authorization'] || '';
     }
     return config;
 });
@@ -39,9 +40,9 @@ http.interceptors.response.use( resp => {
     const toast = useToast();
 
     // check for 'unauthorized response'.
-    if(error.response && (error.response.status === 401 || error.response.status === 403)) {  
-       // const authStore = useAuthStore();      
-       // authStore.logout();
+    if(error.response && (error.response.status === 401 || error.response.status === 403)) {          
+       const authStore = useAuthStore();      
+       authStore.logout();
     }
     // handle our "ProblemDetails" json object which is returned from our REST API whenever an application error or a validation error occurs.
     // check for ValidationProblemDetails object returned from our REST API

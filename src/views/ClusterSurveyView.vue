@@ -1,13 +1,32 @@
 <script setup lang="ts">
 
 import { useAuthStore } from '@/stores/auth-store';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Datepicker from '@vuepic/vue-datepicker';
 import { dateTimeToShortDateString } from '@/helpers/formatters';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, helpers, maxLength, requiredIf, integer  } from '@vuelidate/validators';
 import {usPhoneNumber, vinNumber} from '@/helpers/validators';
 import * as surveyService from '@/services/survey-service';
+import * as orderService from '@/services/order-service';
+
+const props = defineProps<{orderId?: number}>();
+
+onMounted(async () => {
+  if(props.orderId) {
+
+    var order = await orderService.getOrder(props.orderId);
+    
+    survey.value.serviceDate = new Date().toDateString();
+    survey.value.deliveryDate = order.deliveryDate ?? '';
+    survey.value.customerComplaint = order.complaint ?? '';
+    survey.value.mileage = order.mileage?.toString() ?? '';
+    survey.value.tacCaseNumber = order.tacCaseNumber ?? '';
+    survey.value.roNumber = order.roNumber ?? '';
+    survey.value.partNumber = order.partNumber ?? '';
+    survey.value.vin = order.vin ?? '';
+  }
+})
 
 const store = useAuthStore();
 let survey = ref({
@@ -20,7 +39,7 @@ let survey = ref({
   model: '',
   modelYear: null,
   roNumber: '',
-  mileage: null,
+  mileage: '',
   partNumber: '',
   orderedByName: '',
   escRaNumber: '',

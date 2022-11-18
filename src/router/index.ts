@@ -7,16 +7,30 @@ import { useAuthStore } from '@/stores/auth-store';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // {
+    //   path: '/',
+    //   name: 'home',
+    //   component: HomeView,
+    //   meta: {
+    //     title: 'Home Page',
+    //     metaTags: [
+    //       {
+    //         name: 'Dealer Login Page',
+    //         content: ''
+    //       }
+    //     ]
+    //   }
+    // },
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      name: 'login',
+      component: () => import('../views/LoginView.vue'),
       meta: {
-        title: 'Home Page',
+        title: 'Dealer Login',
         metaTags: [
           {
             name: 'Dealer Login Page',
-            content: ''
+            content: 'The login page for customer dealers.'
           }
         ]
       }
@@ -54,22 +68,7 @@ const router = createRouter({
           component: () => import('../views/ClientAddView.vue')
         }
       ]
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/LoginView.vue'),
-      meta: {
-        title: 'Dealer Login',
-        metaTags: [
-          {
-            name: 'Dealer Login Page',
-            content: 'The login page for customer dealers.'
-          }
-        ]
-      }
-    },
-
+    },  
     {
       path: '/advexchange',
       name: 'advancedexchange',
@@ -98,7 +97,26 @@ const router = createRouter({
           path: 'order/:orderType/:partNumber',
           name: 'orderex',
           props: true,
-          component: () => import('../views/OrderView.vue')
+          component: () => import('../views/OrderView.vue'),
+          children: [
+            
+              {
+                path: 'confirm/:orderId',
+                name: 'orderconfirm1',
+                props: true,
+                component: () => import('../views/OrderConfirmationView.vue'),
+                meta: {
+                  title: 'Order Confirmation',
+                  metaTags: [
+                    {
+                      name: 'Order Confirmation',
+                      content: 'Your order confirmation number and info.'
+                    }
+                  ]
+                },
+              }
+            
+          ]
         }]
     },
     {
@@ -127,9 +145,89 @@ const router = createRouter({
           path: 'order/:orderType/:partNumber',
           name: 'orderpurch',
           props: true,
-          component: () => import('../views/OrderView.vue')
+          component: () => import('../views/OrderView.vue'),
+          children: [
+            
+            {
+              path: 'confirm/:orderId',
+              name: 'orderconfirm2',
+              props: true,
+              component: () => import('../views/OrderConfirmationView.vue'),
+              meta: {
+                title: 'Order Confirmation',
+                metaTags: [
+                  {
+                    name: 'Order Confirmation',
+                    content: 'Your order confirmation number and info.'
+                  }
+                ]
+              },
+            }
+          
+        ]
         }]
     },
+
+    {
+      path: '/nissandownloads',
+      name: 'Downloads',
+      component: () => import('../views/NissanDownloadsView.vue'),
+      meta: {
+        title: 'Downloads',
+        metaTags: [
+          {
+            name: 'Downloads',
+            content: 'Download various forms.'
+          }
+        ]
+      },      
+    },
+    {
+      path: '/speedometer',
+      name: 'speedometer',
+      component: () => import('../views/SpeedometerView.vue'),
+      meta: {
+        title: 'Speedometer',
+        metaTags: [
+          {
+            name: 'Speedometer',
+            content: 'Check stock and perform exchanges for nissan dealers.'
+          }
+        ]
+      },      
+      children: [
+        {        
+          path: '',
+          name: 'checkstocknissan',
+          props: false,
+          component: () => import('../views/CheckStockView.vue')
+        },
+        {       
+          path: 'order/:orderType/:partNumber',
+          name: 'ordernissan',
+          props: true,
+          component: () => import('../views/OrderNissanView.vue'),
+          children: [            
+              {
+                path: 'confirm/:orderId',
+                name: 'orderconfirmnissan',
+                props: true,
+                component: () => import('../views/OrderConfirmationView.vue'),
+                meta: {
+                  title: 'Order Confirmation',
+                  metaTags: [
+                    {
+                      name: 'Order Confirmation',
+                      content: 'Your order confirmation number and info.'
+                    }
+                  ]
+                },
+              }
+            
+          ]
+        }]
+    },
+
     {
       path: '/invoicehist',
       name: 'invoicehistory',
@@ -160,8 +258,9 @@ const router = createRouter({
       },
     },
     {
-      path: '/radiosurvey',
+      path: '/radiosurvey/:orderId?',
       name: 'radiosurvey',
+      props: true,
       component: () => import('../views/RadioSurveyView.vue'),
       meta: {
         title: 'Radio Survey',
@@ -174,8 +273,9 @@ const router = createRouter({
       },
     },
     {
-      path: '/clustersurvey',
+      path: '/clustersurvey/:orderId?',
       name: 'clustersurvey',
+      props: true,
       component: () => import('../views/ClusterSurveyView.vue'),
       meta: {
         title: 'Cluster Survey',
@@ -186,7 +286,7 @@ const router = createRouter({
           }
         ]
       },
-    }
+    },   
   ]
 });
 
@@ -200,7 +300,7 @@ router.beforeEach(async (to) => {
   const authStore = useAuthStore();
   if (authRequired && (!authStore.profile || !authStore.profile.token)) {
     authStore.setReturnUrl(to.fullPath);
-    return '/login';
+    return '/';
   }
 });
 

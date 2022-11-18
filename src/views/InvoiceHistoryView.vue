@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { OrderType } from '@/types/enumtypes';
 import LoadingComponent from '@/components/LoadingComponent.vue';
-import type { OrderModel } from '@/types/models';
+import type { IInvoiceHistoryModel } from '@/types/models';
 import { dateTimeToShortDateString } from '@/helpers/formatters';
 import IconDocumentViewRed from '../components/icons/IconDocumentViewRed.vue';
 
@@ -16,6 +16,13 @@ const store = useAuthStore();
 const router = useRouter();
 
 let orderType = ref(OrderType.Exchange);
+if(store.isNissanDealer){
+  orderType.value = OrderType.Nissan;
+} else if (store.isInternationalDealer) {
+  orderType.value = OrderType.International;
+}
+
+
 let orderDateFrom = ref<Date | null>(null);
 let orderDateTo = ref<Date | null>(null);
 let orderNumber = ref(null);
@@ -23,15 +30,30 @@ let poNumber = ref(null);
 let customerName = ref(null);
 let isLoading = ref(false);
 let showSearch = ref(true);
-let orderSearchResults = ref<Array<OrderModel> | null>(null);
+let orderSearchResults = ref<Array<IInvoiceHistoryModel> | null>(null);
 let gridViewType = ref("1");
 
-let partImageSrc = (partNumber: string) => {
+let partImageSrc = (partNumber: string, orderNumber: string) => {
+
+  if(imageErrors.value[orderNumber] === true){
+        return '/member/src/assets/images/no-image.png';
+    }
+
   if (partNumber) {
     return `http://localhost/modelimages/${partNumber}.jpg`;
   }
   return '';
 };
+
+let arr: any = {};
+let imageErrors = ref(arr);
+
+// this function runs when there was an error loading the part Image from the image repository. if there was an error, we replace the image with a 'no image' image.
+let replaceWithNoImageImg = function(orderNumber: string){
+    imageErrors.value[orderNumber] = true;
+}
+
+let currentSelectedOrderType = ref('');
 
 async function onSubmit() {
   console.debug('On Submit called...')
@@ -48,10 +70,18 @@ async function onSubmit() {
   try {
     isLoading.value = true;
     let results = await orderService.getOrderHistory(orderType.value, store.customerNumber!, dateFrom, dateTo, orderNumber.value, poNumber.value, customerName.value);
+    //let results = await orderService.getOrderHistory(OrderType.Nissan, store.customerNumber!, dateFrom, dateTo, orderNumber.value, poNumber.value, customerName.value);
     console.debug('Order results...');
     console.debug(results);
 
     orderSearchResults.value = results;
+
+    if(orderType.value === OrderType.Exchange){
+      currentSelectedOrderType.value = 'exchange';
+    } else if(orderType.value === OrderType.Purchase){
+      currentSelectedOrderType.value = 'sales';
+    }    
+
   } finally {
     isLoading.value = false;
   }
@@ -66,9 +96,10 @@ async function onSubmit() {
 <template>
 
   <main v-if="showSearch" class="history-search">
-    <h3>Select an Order Type</h3>
+
+    <h3 v-if="store.isGMOrOtherDealer">Select an Order Type</h3>
     <div class="container">
-      <div class="row">
+      <div class="row" v-if="store.isGMOrOtherDealer">
         <div class="col order-type" style="display: flex; justify-content: center;">
           <div class="form-check form-check-inline form-radio-button">
             <input type="radio" class="form-check-input" name="orderType" id="rdoExchanges" autocomplete="off" value="2"
@@ -212,7 +243,7 @@ async function onSubmit() {
       </div>
       <div class="col history-form-main">
         <div class="top-space">
-          <h4>{{orderSearchResults?.length}} exchange invoices found</h4>
+          <h4>{{orderSearchResults?.length}} {{currentSelectedOrderType}} invoices found</h4>
           <div>
             <div class="form-check form-check-inline form-radio-button">
               <input type="radio" class="form-check-input" name="historyViewType" id="rdoGridView" autocomplete="off"
@@ -241,7 +272,7 @@ async function onSubmit() {
             </div>
             <div class="invoice-body row">
               <div class="col-xxl-3 d-flex justify-content-center">
-                <img class="part-image" height="" :src="partImageSrc(order.itemNumber)" />
+                <img class="part-image" height="" :src="partImageSrc(order.itemNumber, order.orderNumber.toString())" @error="replaceWithNoImageImg(order.orderNumber.toString())" />
               </div>
               <div class="col-xxl-6">
                 <div class="row pb-3">
@@ -292,6 +323,7 @@ async function onSubmit() {
                 <th>PO#</th>
                 <th>Customer Name</th>
                 <th>Ship Date</th>
+                <th>Core Status</th>
                 <th>Tracking #</th>
                 <th>&nbsp;</th>
               </tr>
@@ -305,6 +337,7 @@ async function onSubmit() {
                 <td>{{order.poNumber}}</td>
                 <td>{{order.customerName}}</td>
                 <td>{{dateTimeToShortDateString(order.shipDate)}}</td>
+                <td>{{order.coreReturnedDate !== null ? 'Returned' : 'Pending'}}</td>
                 <td><a :href="orderService.getOrderTrackingUrl(order.trackingNumber)" target="_blank">{{order.trackingNumber}}</a></td>
                 <td><a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)" target="_blank"><IconDocumentViewRed></IconDocumentViewRed></a></td>
               </tr>            

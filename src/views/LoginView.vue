@@ -22,9 +22,19 @@ async function login() {
   // go to member landing page which is the check stock view
   if(store.returnUrl){
     console.debug('return url fullpath is: ' + store.returnUrl);
-    router.push(store.returnUrl);
+    let returnUrlCopy = store.returnUrl;
+    store.setReturnUrl('');
+
+    router.push(returnUrlCopy);
   } else {
-    router.push({name: 'advancedexchange'});
+    console.debug('going to advanced exchange page')
+
+    if(!store.isNissanDealer){
+      router.push('/advexchange');
+    } else {
+      router.push('speedometer');
+    }
+    
   } 
 }
  

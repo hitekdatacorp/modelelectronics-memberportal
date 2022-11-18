@@ -18,8 +18,9 @@ import OrderForm from '../components/forms/OrderForm.vue';
 import type { OrderFormViewModel } from '@/types/viewmodels';
 import { required, email } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
-import { OrderType } from '@/types/enumtypes';
+import { OrderType, PartTypes } from '@/types/enumtypes';
 import { toCurrencyString } from '@/helpers/formatters';
+import * as orderService from '@/services/order-service';
 
 
 const props = defineProps({
@@ -33,18 +34,19 @@ const store = useAuthStore();
 const router = useRouter();
 
 const order = reactive<OrderFormViewModel>({
+  orderType: props.orderType,
   partNumber: props.partNumber,
-  dealershipName: store.name!,
-  dealershipCode: store.customerNumber!,
+  dealerName: store.name!,
+  dealerCode: store.customerNumber!,
   contactName: '',
-  emailAddress: '',
-  phoneNumber: '',
+  emailAddress: store.email ?? '',
+  phoneNumber: store.phone ?? '',
   customerName: '',
   mileage: '',
   vin: '',
   partNumberObtained: '',
 
-  // isWarranty: false,
+  // isWarrantyExchange: false,
   // isCore: false,
   // isGoodwill: false,
 
@@ -52,15 +54,22 @@ const order = reactive<OrderFormViewModel>({
   poNumber: '',
   serviceManagerFullName: '',
   //deliveryDate: ,
-  hours: '',
+  //hours: null,
   customerComplaint: '',
 
-  address: '',
-  city: '',
-  state: '',
-  zip: '',
+  address: store.address ?? '',
+  city: store.city ?? '',
+  state: store.state ?? '',
+  zip: store.zip ?? '',
   shippingMethod: '',
+
   //comments, ''
+  customerMailingAddress: '',
+  customerMailingCity: '',
+  customerMailingState: '',
+  customerMailingZip: '',
+
+  technicianName: ''
 });
 
 
@@ -72,6 +81,8 @@ let searchResult = ref<ItemAvailabilityResult | null>(null);
 const loadSideBar = async () => {
   let itemResult = await getItemAvailability(props.partNumber);
   searchResult.value = itemResult;
+
+  order.isRadio = itemResult.isRadio;
 }
 
 
@@ -106,31 +117,69 @@ function placeOrder(isFormValid: boolean) {
 
   if (!isFormValid) {
     console.log('form is not valid');
+    toast.error('The form is not valid. Please check to make sure you filled out all of the required fields.');
     return;
   }
 
-  if(order.isCore !== undefined && order.isCore !== null && order.isCore === false){
+  if (order.isWarrantyExchange === false && order.isCore !== undefined && order.isCore !== null && order.isCore === false) {
     showCoreMessage.value = true;
     return;
   }
 
-  
-
   isLoading.value = true;
-  setTimeout(() => {
-    toast.success('Order Placed');
+  setTimeout(async () => {
 
-    //clearOrderFields(order);
-    isLoading.value = false;
+    try {
+      // create the order
+      let orderResult = await orderService.createOrder(order);
 
-  }, 2000);
+      let item = searchResult.value?.item;
+      let availability = searchResult.value?.exchangeAvailability;
+
+      if (order.isWarrantyExchange && availability?.partIsRestricted) {
+
+        if (item?.partType === PartTypes.Cluster || item?.partType === PartTypes.Lcd) {
+
+          toast.success('Your order was successfully placed. Because this is a Cluster part, you must fill out the CLUSTER survey and submit it.', {
+            timeout: false
+          });
+
+          // redirect user to the Pqc Cluster survey for them to fill out the form
+          router.push(`/clustersurvey/${orderResult.orderId}`);
+          return;
+        } else if (item?.partType === PartTypes.Radio) {
+
+          toast.success('Your order was successfully placed. Because this is a Radio part, you must fill out the RADIO survey and submit it.', {
+            timeout: false
+          });
+
+          // redirect user to the Pqc Radio survey for them to fill out the form.
+          router.push(`/radiosurvey/${orderResult.orderId}`);
+          return;
+        }
+      }
+
+      toast.success('Order was successfully placed.');
+      let orderId = orderResult.orderId;
+
+      if (props.orderType === OrderType.Exchange) {
+        router.push(`/advexchange/order/${props.orderType}/${props.partNumber}/confirm/${orderId}`);
+      } else if (props.orderType === OrderType.Purchase) {
+        router.push(`/outrightpurchase/order/${props.orderType}/${props.partNumber}/confirm/${orderId}`);
+      }      
+
+    } finally {
+      isLoading.value = false;
+    }
+
+  }, 1000);
 }
 
 function purchasePart() {
   router.push({ name: 'orderpurch', params: { partNumber: props.partNumber, orderType: OrderType.Purchase } });
 }
 
-function showCoreMessageHandler(showCore: boolean){
+function showCoreMessageHandler(showCore: boolean) {
   showCoreMessage.value = showCore;
 }
 
@@ -146,25 +195,35 @@ function showCoreMessageHandler(showCore: boolean){
       </div>
       <div class="col order-form-main">
 
-        <div class="top-space">
-          <span class="req-label">Required Field</span>
-        </div>
+        <RouterView />
 
-        <LoadingComponentLarge v-if="isLoading" view-box="0 0 700 500"></LoadingComponentLarge>
-        <OrderForm v-if="!isLoading" :order-type="props.orderType" :part-number="props.partNumber"
-          :dealership-name="store.name!" :dealership-code="store.customerNumber!"
-          v-model:contact-name="order.contactName" v-model:email-address="order.emailAddress"
-          v-model:phone-number="order.phoneNumber" v-model:customer-name="order.customerName"
-          v-model:mileage="order.mileage" v-model:vin="order.vin"
-          v-model:part-number-obtained="order.partNumberObtained" v-model:is-warranty="order.isWarranty"
-          v-model:is-core="order.isCore" v-model:is-goodwill="order.isGoodwill" v-model:po-number="order.poNumber"
-          v-model:ro-number="order.roNumber" v-model:service-manager-full-name="order.serviceManagerFullName"
-          v-model:delivery-date="order.deliveryDate" v-model:hours="order.hours"
-          v-model:customer-complaint="order.customerComplaint" v-model:address="order.address" v-model:city="order.city"
-          v-model:state="order.state" v-model:zip="order.zip" v-model:shipping-method="order.shippingMethod"
-          v-model:comments="order.comments"
-          @on-show-core-message="showCoreMessageHandler"
-          @on-submit="placeOrder"></OrderForm>
+        <div
+          v-if="router.currentRoute.value.name !== 'orderconfirm1' && router.currentRoute.value.name !== 'orderconfirm2'">
+
+          <div class="top-space">
+            <span class="req-label">Required Field</span>
+          </div>
+          <LoadingComponentLarge v-if="isLoading" view-box="0 0 700 500"></LoadingComponentLarge>
+          <OrderForm v-show="!isLoading" :order-type="props.orderType" :part-number="props.partNumber"
+            :dealer-name="store.name!" :dealer-code="store.customerNumber!" :part-is-restricted="searchResult?.exchangeAvailability?.partIsRestricted ?? undefined"
+            v-model:contact-name="order.contactName"
+            v-model:email-address="order.emailAddress" v-model:phone-number="order.phoneNumber"
+            v-model:customer-name="order.customerName" v-model:mileage="order.mileage" v-model:vin="order.vin"
+            v-model:part-number-obtained="order.partNumberObtained"
+            v-model:is-warranty-exchange="order.isWarrantyExchange" v-model:is-radio="order.isRadio"
+            v-model:is-media-stuck="order.isMediaStuck" v-model:is-core="order.isCore"
+            v-model:is-goodwill="order.isGoodwill" v-model:po-number="order.poNumber" v-model:ro-number="order.roNumber"
+            v-model:service-manager-full-name="order.serviceManagerFullName" v-model:delivery-date="order.deliveryDate"
+            v-model:hours="order.hours" v-model:customer-complaint="order.customerComplaint"
+            v-model:address="order.address" v-model:city="order.city" v-model:state="order.state"
+            v-model:zip="order.zip" v-model:shipping-method="order.shippingMethod" v-model:comments="order.comments"
+            v-model:customer-mailing-address="order.customerMailingAddress"
+            v-model:customer-mailing-city="order.customerMailingCity"
+            v-model:customer-mailing-state="order.customerMailingState"
+            v-model:technician-name="order.technicianName"
+            v-model:customer-mailing-zip="order.customerMailingZip" @on-show-core-message="showCoreMessageHandler"
+            @on-submit="placeOrder"></OrderForm>
+        </div>
       </div>
 
       <vue-final-modal v-model="showCoreMessage" classes="modal-container" content-class="modal-content">
@@ -172,7 +231,8 @@ function showCoreMessageHandler(showCore: boolean){
           <IconCloseXBlack />
         </button>
 
-        <span class="modal__title">If you don't have a core for <span style="color: #0041A3">part # {{props.partNumber}}</span> you will need
+        <span class="modal__title">If you don't have a core for <span style="color: #0041A3">part #
+            {{ props.partNumber }}</span> you will need
           to do an outright purchase for this part.</span>
         <div class="modal__content">
           <p class="purchase-box">
@@ -180,18 +240,18 @@ function showCoreMessageHandler(showCore: boolean){
             <label>OUTRIGHT PURCHASE PRICE</label>
           </div>
           <div>
-            <div class="price">{{purchasePartPriceText}}</div>
+            <div class="price">{{ purchasePartPriceText }}</div>
           </div>
           </p>
           <p style="margin-top: 2em;">
           <div style="width: fit-content; margin: 0 auto;">
             <button type="button" class="btn btn-secondary" @click="purchasePart"
-                    :disabled="searchResult?.purchaseAvailability?.partPriceMessage !== null && searchResult?.purchaseAvailability?.partPriceMessage !== ''">Purchase</button>
+              :disabled="searchResult?.purchaseAvailability?.partPriceMessage !== null && searchResult?.purchaseAvailability?.partPriceMessage !== ''">Purchase</button>
           </div>
           </p>
         </div>
       </vue-final-modal>
-      
+
     </div>
   </main>
 
@@ -202,7 +262,7 @@ function showCoreMessageHandler(showCore: boolean){
   display: flex;
   justify-content: center;
   align-items: center;
- 
+
   opacity: 1;
 }
 
@@ -217,40 +277,40 @@ function showCoreMessageHandler(showCore: boolean){
   border: 1px solid #e2e8f0;
   border-radius: 0.25rem;
   background: #FFFFFF 0% 0% no-repeat padding-box;
-  box-shadow: 0px 0px 10px #00000029; 
+  box-shadow: 0px 0px 10px #00000029;
 }
 
 p.purchase-box {
-    background-color: #F0F4FA;
-    margin: 0 auto;
-    width: fit-content;
-    padding: 1.5em 3em;
-    background: #F0F4FA 0% 0% no-repeat padding-box;
-    opacity: 1;
+  background-color: #F0F4FA;
+  margin: 0 auto;
+  width: fit-content;
+  padding: 1.5em 3em;
+  background: #F0F4FA 0% 0% no-repeat padding-box;
+  opacity: 1;
 
-    label {
-      text-align: left;
-      font: normal normal bold 0.8rem/1.1rem Inter-Bold;
-      letter-spacing: 0px;
-      color: #000000;
-      text-transform: uppercase;
-      opacity: 0.54;
-    }
-
-    .price {
-      text-align: center;
-      font-family: Inter-Bold;
-      font-size: 2em;
-    }
+  label {
+    text-align: left;
+    font: normal normal bold 0.8rem/1.1rem Inter-Bold;
+    letter-spacing: 0px;
+    color: #000000;
+    text-transform: uppercase;
+    opacity: 0.54;
   }
+
+  .price {
+    text-align: center;
+    font-family: Inter-Bold;
+    font-size: 2em;
+  }
+}
 
 .modal__title {
   text-align: center;
   font: normal normal bold 24px/33px Inter-Bold;
   letter-spacing: 0px;
   opacity: 1;
-  margin: 2em 2rem 2rem 0;  
-  
+  margin: 2em 2rem 2rem 0;
+
 }
 
 .modal__close {

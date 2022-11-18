@@ -38,7 +38,8 @@ watch(() => route.meta.title, () => {
                         <button class="navbar-toggler collapsed me-2 p-0" type="button" data-bs-toggle="collapse"
                             data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false"
                             aria-label="Toggle navigation"></button>
-                        <a :href="PUBLIC_SITE_URL">
+                        <!-- <a :href="PUBLIC_SITE_URL"> -->
+                            <a href="/">
                             <!-- Logo -->
                             <img id="site-identity" src="@/assets/images/logo-model-electronics.svg" width="226"
                                 height="63" alt="Model Electronics Logo">
@@ -50,26 +51,26 @@ watch(() => route.meta.title, () => {
                     <div class="collapse navbar-collapse" id="navbarToggler" v-if="!store.isAuthenticated()">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" :href="PUBLIC_SITE_URL + 'services'"><span>Services</span></a>
+                                <a class="nav-link" href="/services"><span>Services</span></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" :href="PUBLIC_SITE_URL + 'about'"><span>About Us</span></a>
+                                <a class="nav-link" href='/about'><span>About Us</span></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" :href="PUBLIC_SITE_URL + 'contact-us'"><span>Contact Us</span></a>
+                                <a class="nav-link" href='/contact-us'><span>Contact Us</span></a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="https://www.modelelectronicsaes.com/" target="_blank"
                                     rel="nofollow"><span>Aftermarket Products</span></a>
                             </li>
                             <li class="nav-item ms-2 d-none d-lg-block">
-                                <RouterLink to="/login" id="dealer-login-btn-mobile"
+                                <RouterLink to="/" id="dealer-login-btn-mobile"
                                     class="btn btn-primary btn-with-caret text-uppercase text-white">Dealer Login
                                 </RouterLink>
                             </li>
                         </ul>
                     </div>
-                    <div class="collapse navbar-collapse" id="navbarToggler" v-if="store.isAuthenticated()">
+                    <div class="collapse navbar-collapse" id="navbarToggler" v-if="store.isAuthenticated() && !store.isNissanDealer">
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <RouterLink class="nav-link" to="/advexchange"><span>Advanced Exchange</span>
@@ -92,6 +93,19 @@ watch(() => route.meta.title, () => {
                                 <RouterLink class="nav-link" to="/clustersurvey"><span>Cluster Survey</span>
                                 </RouterLink>
                             </li>
+                        </ul>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbarToggler" v-if="store.isAuthenticated() && store.isNissanDealer">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <RouterLink class="nav-link" to="/speedometer"><span>Speedometer</span></RouterLink>
+                            </li>                           
+                            <li class="nav-item">
+                                <RouterLink class="nav-link" to="/invoicehist"><span>Invoice History</span></RouterLink>
+                            </li>
+                            <li class="nav-item">
+                                <RouterLink class="nav-link" to="/nissandownloads"><span>Downloads</span></RouterLink>
+                            </li>                          
                         </ul>
                     </div>
                 </nav>
