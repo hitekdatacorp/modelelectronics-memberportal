@@ -83,7 +83,13 @@ export async function getOrder(orderId: number): Promise<IOrderModel> {
 
 export async function getOrderHistory(orderType: OrderType, customerNumber: string, orderDateFrom?: Date | null, orderDateTo?: Date | null, orderNumber?: string | null, poNumber?: string | null, customerName?: string | null): Promise<Array<IInvoiceHistoryModel>> {    
 
-    let url = `orders/customerhistory/${customerNumber}/?orderType=${orderType}&`;
+    let url = '';
+
+    if(orderType === OrderType.Purchase){
+        url = `orders/saleshistory/${customerNumber}/?orderType=${orderType}&`;
+    } else {
+        url = `orders/exchangehistory/${customerNumber}/?orderType=${orderType}&`;
+    }
 
     if(orderDateFrom) {
         url += `startDate=${dateToUrlReadyParam(orderDateFrom)}&`;

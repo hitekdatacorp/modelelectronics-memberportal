@@ -3,7 +3,8 @@
 
 interface ImportMetaEnv {
   readonly VITE_API_URL: string;
-  readonly VITE_PUBLIC_SITE_URL: string;
+  readonly VITE_NJ_SITE_URL: string;
+  readonly VITE_TX_SITE_URL: string;
   // more env variables...
 
   readonly VITE_INVOICEGENERATOR_URL: string;

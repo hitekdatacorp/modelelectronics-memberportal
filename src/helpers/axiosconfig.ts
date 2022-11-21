@@ -9,7 +9,19 @@ import { useAuthStore } from '@/stores/auth-store';
 // const PUBLIC_SITE_DEV_URL = 'https://localhost:44368/';
 // const PUBLIC_SITE_PROD_URL = 'https://www.modelelectronics.com/';
 
-export const PUBLIC_SITE_URL = import.meta.env.VITE_PUBLIC_SITE_URL;
+const njSiteUrl = import.meta.env.VITE_NJ_SITE_URL;
+const txSiteUrl = import.meta.env.VITE_TX_SITE_URL;
+
+export const CURRENT_SITE_BASE_URL = window.location.origin; //import.meta.env.VITE_PUBLIC_SITE_URL;
+
+
+export let IS_NJ_URL = () => {
+    return CURRENT_SITE_BASE_URL + '/' === njSiteUrl;
+}
+
+export let IS_TX_URL = () => {
+    return CURRENT_SITE_BASE_URL + '/' === txSiteUrl;
+}
 
 const axiosConfig = {
     baseURL: `${import.meta.env.VITE_API_URL}`,
@@ -26,7 +38,11 @@ http.interceptors.request.use( config => {
 
     if(config && config.url && config.headers) {
         const authStore = useAuthStore();
+        // set the auth header and pass the jwt token
         config.headers['Authorization'] = authStore.authHeader(config.baseURL!)['Authorization'] || '';
+
+        // set the header which determines which site we're going to connect to when calling the API. Either NJ or TX.
+        config.headers['X_SITE_TENANT'] = IS_NJ_URL() ? 'NJ' : (IS_TX_URL() ? 'TX' : 'NJ');
     }
     return config;
 });

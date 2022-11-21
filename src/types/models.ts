@@ -239,24 +239,28 @@ export interface SearchResult {
     item?: ItemAvailabilityResult | InternationalItemAvailabilityResult | NissanItemAvailabilityResult | null
 }
 
-
+// This model is a combined model that represents either an Exchange or Sale (Purchase). There are some differences in fields but for ease of use in the UI we combined
+// both models into this one big model
 export interface IInvoiceHistoryModel {
 
     orderDate: Date;
     orderNumber: number;
     dealerContact: string;
-    roNumber: string;
+    roNumber: string; 
     poNumber: string;
-    itemNumber: string;    
-    partDescription: string;
+    itemNumber: string;    // exchange
+    partDescription: string; // exchange
     customerName: string;
     shipDate: string | null;
     trackingNumber: string;
     status: string;
-    quantity: number | null;
-    price: number | null;
-    total: number | null;
+    
+    // sales order only
+    totalSales: number | null;
+    // sales order only
+    totalQuantity: number | null;
 
+    // exchange order only
     coreReturnedDate: Date | null;    
 }
 

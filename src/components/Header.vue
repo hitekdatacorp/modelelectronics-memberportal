@@ -2,7 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import "@/assets/scss/modelelectronics.scss";
 import { useAuthStore } from '@/stores/auth-store';
-import { PUBLIC_SITE_URL } from '@/helpers/axiosconfig';
+import { IS_NJ_URL, IS_TX_URL } from '@/helpers/axiosconfig';
 import {useRoute} from 'vue-router';
 import { watch, ref } from 'vue';
 
@@ -70,26 +70,26 @@ watch(() => route.meta.title, () => {
                             </li>
                         </ul>
                     </div>
-                    <div class="collapse navbar-collapse" id="navbarToggler" v-if="store.isAuthenticated() && !store.isNissanDealer">
+                    <div class="collapse navbar-collapse" id="navbarToggler" style="justify-content: center; width: 100%;" v-if="store.isAuthenticated() && !store.isNissanDealer">
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <RouterLink class="nav-link" to="/advexchange"><span>Advanced Exchange</span>
                                 </RouterLink>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" v-if="IS_NJ_URL()">
                                 <RouterLink class="nav-link" to="/outrightpurchase"><span>Outright Purchase</span>
                                 </RouterLink>
                             </li>
                             <li class="nav-item">
                                 <RouterLink class="nav-link" to="/invoicehist"><span>Invoice History</span></RouterLink>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" v-if="IS_NJ_URL()">
                                 <RouterLink class="nav-link" to="/repairform"><span>Repair Form</span></RouterLink>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" v-if="IS_NJ_URL()">
                                 <RouterLink class="nav-link" to="/radiosurvey"><span>Radio Survey</span></RouterLink>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" v-if="IS_NJ_URL()">
                                 <RouterLink class="nav-link" to="/clustersurvey"><span>Cluster Survey</span>
                                 </RouterLink>
                             </li>

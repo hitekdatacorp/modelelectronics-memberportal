@@ -87,7 +87,7 @@ async function checkStock(e: Event) {
 
       <div class="row pt-4" v-if="showSearchResult">
         <div class="col-12 search-results">         
-          <h5 v-if="searchResult?.itemExists && searchResult.alternateItems?.length">The top item is out of stock. You may order any of the alternate parts listed below as well.</h5>
+          <h5 class="alt-text" v-if="searchResult?.itemExists && searchResult.alternateItems?.length">If the top item is out of stock you may order any of the alternate parts listed below as well.</h5>
         </div>
       </div>
       
@@ -125,5 +125,13 @@ main.checkstock-form {
 h4,
 h5 {
   text-align: center;
+}
+
+h5.alt-text {
+  font-size: 1.3rem;
+    background-color: yellow;
+    padding: 15px;
+    font-size: 1.25rem;
+    
 }
 </style>

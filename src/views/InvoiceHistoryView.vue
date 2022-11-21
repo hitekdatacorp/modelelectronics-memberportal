@@ -258,7 +258,7 @@ async function onSubmit() {
           </div>
         </div>
 
-        <div class="bottom-space" v-if="gridViewType === '1'">
+        <div class="bottom-space" v-if="gridViewType === '1' && !isLoading">
           <div class="invoice-grid-box" v-for="order of orderSearchResults" :key="order.orderNumber">
             <div class="invoice-header">
               <div>
@@ -271,8 +271,9 @@ async function onSubmit() {
               </div>
             </div>
             <div class="invoice-body row">
-              <div class="col-xxl-3 d-flex justify-content-center">
-                <img class="part-image" height="" :src="partImageSrc(order.itemNumber, order.orderNumber.toString())" @error="replaceWithNoImageImg(order.orderNumber.toString())" />
+              <div class="col-xxl-3 d-flex justify-content-center" >
+                <img class="part-image" height="" :src="partImageSrc(order.itemNumber, order.orderNumber.toString())" @error="replaceWithNoImageImg(order.orderNumber.toString())"
+                v-if="currentSelectedOrderType === 'exchange'" />
               </div>
               <div class="col-xxl-6">
                 <div class="row pb-3">
@@ -312,7 +313,7 @@ async function onSubmit() {
           </div>
         </div>
 
-        <div class="bottom-space" v-if="gridViewType === '2'">
+        <div class="bottom-space" v-if="gridViewType === '2' && !isLoading">
           <table class="table table-striped invoice-table">
             <thead>
               <tr>
@@ -323,7 +324,7 @@ async function onSubmit() {
                 <th>PO#</th>
                 <th>Customer Name</th>
                 <th>Ship Date</th>
-                <th>Core Status</th>
+                <th v-if="currentSelectedOrderType === 'exchange'">Core Status</th>
                 <th>Tracking #</th>
                 <th>&nbsp;</th>
               </tr>
@@ -337,7 +338,7 @@ async function onSubmit() {
                 <td>{{order.poNumber}}</td>
                 <td>{{order.customerName}}</td>
                 <td>{{dateTimeToShortDateString(order.shipDate)}}</td>
-                <td>{{order.coreReturnedDate !== null ? 'Returned' : 'Pending'}}</td>
+                <td v-if="currentSelectedOrderType === 'exchange'">{{order.coreReturnedDate !== null ? 'Returned' : 'Pending'}}</td>
                 <td><a :href="orderService.getOrderTrackingUrl(order.trackingNumber)" target="_blank">{{order.trackingNumber}}</a></td>
                 <td><a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)" target="_blank"><IconDocumentViewRed></IconDocumentViewRed></a></td>
               </tr>            
