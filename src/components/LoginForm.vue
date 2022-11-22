@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<LoginProps>(), {
 });
 
 const emit = defineEmits<{
-    (e: 'onSubmit'): void,
+    (e: 'onSubmit', ev: Event): void,
     (e: 'update:customerNumber'): void
     (e: 'update:password'): void
 }>();
@@ -23,7 +23,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <form>
+    <form >
         <!-- Email input -->
         <div class="form-outline mb-4">
             <input type="text" id="form2Example1" class="form-control" :value="customerNumber"
@@ -57,7 +57,7 @@ const emit = defineEmits<{
         </div>
 
         <!-- Submit button -->
-        <button type="button" class="btn btn-primary col-12 mb-4" @click="emit('onSubmit')">Sign in</button>
+        <input type="submit" class="btn btn-primary col-12 mb-4" @click="emit('onSubmit', $event)" value="Sign in" />
 
         <!-- Register buttons -->
         <div class="text-center">

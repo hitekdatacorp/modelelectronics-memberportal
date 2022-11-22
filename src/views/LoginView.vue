@@ -11,7 +11,9 @@
 let customerNumber = ref('');
 let password = ref('');
  
-async function login() {
+async function login(e: Event) {
+  e.preventDefault();
+
   console.debug(`Entered login method. customer number is ${customerNumber.value}. password is ${password.value}.`);
   // no try catch block needed because we handle our errors globally (see axios config)
   const response = await store.authenticate(customerNumber.value, password.value);
@@ -45,7 +47,7 @@ async function login() {
     
     <LoginForm v-model:customerNumber="customerNumber" 
                v-model:password="password" 
-               @on-submit="login()" 
+               @on-submit="login" 
                :show-register='false'
                :show-social-icons="false"/>
   </main>

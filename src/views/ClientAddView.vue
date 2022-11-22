@@ -3,7 +3,7 @@
 import { reactive, watch, ref } from 'vue'
 import { Client as Client, Gender } from '../types/models'
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
-import ClientForm from '@/components/ClientForm.vue'
+import ClientForm from '@/components/forms/ClientForm.vue'
 
 const router = useRouter();
 const props = defineProps({  

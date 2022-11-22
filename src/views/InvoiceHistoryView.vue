@@ -33,6 +33,8 @@ let showSearch = ref(true);
 let orderSearchResults = ref<Array<IInvoiceHistoryModel> | null>(null);
 let gridViewType = ref("1");
 
+const IMAGES_REPOSITORY_URL: string = import.meta.env.VITE_IMAGE_REPOSITORY_URL;
+
 let partImageSrc = (partNumber: string, orderNumber: string) => {
 
   if(imageErrors.value[orderNumber] === true){
@@ -40,7 +42,7 @@ let partImageSrc = (partNumber: string, orderNumber: string) => {
     }
 
   if (partNumber) {
-    return `http://localhost/modelimages/${partNumber}.jpg`;
+    return `${IMAGES_REPOSITORY_URL}${partNumber}.jpg`;
   }
   return '';
 };

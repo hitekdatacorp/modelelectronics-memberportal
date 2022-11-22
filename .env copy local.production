@@ -1,6 +1,5 @@
 
 
-
 VITE_API_URL = 'http://modelapi.hitekdata.com'
 VITE_NJ_SITE_URL = 'http://modelelectronics.hitekdata.com/'
 VITE_TX_SITE_URL = 'http://modeltx.hitekdata.com/'
@@ -10,7 +9,6 @@ VITE_INVOICEGENERATOR_URL = http://invoicegenerator.modelelectronics.com/pdf_fet
 VITE_INVOICE_TRACKING_URL_FORMAT_AIRBORN = http://track.airborne.com/atrknav.asp?shipmentNumber={0}
 VITE_INVOICE_TRACKING_URL_FORMAT_UPS = https://wwwapps.ups.com/etracking/tracking.cgi?tracknums_displayed=5&amp;TypeOfInquiryNumber=T&amp;HTMLVersion=4.0&amp;sort_by=status&amp;InquiryNumber1={0}
 VITE_INVOICE_TRACKING_URL_FORMAT_FEDEX = https://www.fedex.com/apps/fedextrack/?action=track&amp;trackingnumber={0}
-
 
 
  # <add key="FedExTrackingUrlFormat" value="https://www.fedex.com/apps/fedextrack/?action=track&amp;trackingnumber={0}"/>

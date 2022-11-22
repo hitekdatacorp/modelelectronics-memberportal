@@ -2,10 +2,9 @@
 
 import { reactive, watch, ref } from 'vue'
 import { Client as Client, type Gender } from '../types/models'
-import * as clientsJson from '../data/clients.json'
 import { useRouter, onBeforeRouteUpdate } from 'vue-router'
 import {cloneDeep, extend} from 'lodash'
-import ClientForm from '@/components/ClientForm.vue'
+import ClientForm from '@/components/forms/ClientForm.vue'
 import * as clientService from '@/services/client-service';
 
 const router = useRouter();

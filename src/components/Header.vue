@@ -13,7 +13,10 @@ let pageHeader = ref('');
 watch(() => route.meta.title, () => {
     document.title = route.meta.title as string;
     pageHeader.value = route.meta.title as string;
+
 });
+
+let logoSrc = IS_TX_URL() ? 'logo-model-electronics-texas.svg' : 'logo-model-electronics.svg';
 
 </script>
 
@@ -40,8 +43,8 @@ watch(() => route.meta.title, () => {
                             aria-label="Toggle navigation"></button>
                         <!-- <a :href="PUBLIC_SITE_URL"> -->
                             <a href="/">
-                            <!-- Logo -->
-                            <img id="site-identity" src="@/assets/images/logo-model-electronics.svg" width="226"
+                            <!-- Logo -->                            
+                            <img id="site-identity" :src="'/member/src/assets/images/' + logoSrc" width="226"
                                 height="63" alt="Model Electronics Logo">
                         </a>
                     </div>

@@ -5,7 +5,7 @@ import { Client as Client, Gender, UserProfile } from '@/types/models'
 import { useRouter, onBeforeRouteUpdate } from 'vue-router'
 import {cloneDeep, extend} from 'lodash'
 import { UserProfileInjectionKey } from '@/data/keys';
-import {useAuthStore} from '../stores/auth-store';
+import {useAuthStore} from '@/stores/auth-store';
 import { computed } from '@vue/reactivity'
 
 console.debug('ClientForm component initialized.')
