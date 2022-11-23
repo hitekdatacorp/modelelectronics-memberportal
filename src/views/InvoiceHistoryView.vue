@@ -16,7 +16,7 @@ const store = useAuthStore();
 const router = useRouter();
 
 let orderType = ref(OrderType.Exchange);
-if(store.isNissanDealer){
+if (store.isNissanDealer) {
   orderType.value = OrderType.Nissan;
 } else if (store.isInternationalDealer) {
   orderType.value = OrderType.International;
@@ -37,9 +37,9 @@ const IMAGES_REPOSITORY_URL: string = import.meta.env.VITE_IMAGE_REPOSITORY_URL;
 
 let partImageSrc = (partNumber: string, orderNumber: string) => {
 
-  if(imageErrors.value[orderNumber] === true){
-        return '/member/src/assets/images/no-image.png';
-    }
+  if (imageErrors.value[orderNumber] === true) {
+    return '/member/src/assets/images/no-image.png';
+  }
 
   if (partNumber) {
     return `${IMAGES_REPOSITORY_URL}${partNumber}.jpg`;
@@ -50,9 +50,13 @@ let partImageSrc = (partNumber: string, orderNumber: string) => {
 let arr: any = {};
 let imageErrors = ref(arr);
 
+let arrNotFirstLoading: any = {};
+let isNotFirstLoadingArr = ref(arrNotFirstLoading);
+
 // this function runs when there was an error loading the part Image from the image repository. if there was an error, we replace the image with a 'no image' image.
-let replaceWithNoImageImg = function(orderNumber: string){
-    imageErrors.value[orderNumber] = true;
+let replaceWithNoImageImg = function (orderNumber: string) {
+  imageErrors.value[orderNumber] = true;
+  isNotFirstLoadingArr.value[orderNumber] = true;
 }
 
 let currentSelectedOrderType = ref('');
@@ -78,11 +82,11 @@ async function onSubmit() {
 
     orderSearchResults.value = results;
 
-    if(orderType.value === OrderType.Exchange){
+    if (orderType.value === OrderType.Exchange) {
       currentSelectedOrderType.value = 'exchange';
-    } else if(orderType.value === OrderType.Purchase){
+    } else if (orderType.value === OrderType.Purchase) {
       currentSelectedOrderType.value = 'sales';
-    }    
+    }
 
   } finally {
     isLoading.value = false;
@@ -245,7 +249,7 @@ async function onSubmit() {
       </div>
       <div class="col history-form-main">
         <div class="top-space">
-          <h4>{{orderSearchResults?.length}} {{currentSelectedOrderType}} invoices found</h4>
+          <h4>{{ orderSearchResults?.length }} {{ currentSelectedOrderType }} invoices found</h4>
           <div>
             <div class="form-check form-check-inline form-radio-button">
               <input type="radio" class="form-check-input" name="historyViewType" id="rdoGridView" autocomplete="off"
@@ -265,44 +269,53 @@ async function onSubmit() {
             <div class="invoice-header">
               <div>
                 <label>ORDER DATE &nbsp;</label>
-                <span>{{dateTimeToShortDateString(order.orderDate)}}</span>
+                <span>{{ dateTimeToShortDateString(order.orderDate) }}</span>
               </div>
               <div>
                 <label>ORDER # &nbsp;</label>
-                <span>{{order.orderNumber}}</span>
+                <span>{{ order.orderNumber }}</span>
               </div>
             </div>
             <div class="invoice-body row">
-              <div class="col-xxl-3 d-flex justify-content-center" >
-                <img class="part-image" height="" :src="partImageSrc(order.itemNumber, order.orderNumber.toString())" @error="replaceWithNoImageImg(order.orderNumber.toString())"
-                v-if="currentSelectedOrderType === 'exchange'" />
+              <div class="col-xxl-3 d-flex justify-content-center">
+
+                <img id="partImage" v-if="imageErrors[order.orderNumber] === true" class="part-image" height=""
+                  src="@/assets/images/no-image.png" />
+                <img id="partImage"
+                  v-if="!isNotFirstLoadingArr[order.orderNumber] || imageErrors[order.orderNumber] === false"
+                  class="part-image" height="" :src="partImageSrc(order.itemNumber, order.orderNumber.toString())"
+                  @error="replaceWithNoImageImg(order.orderNumber.toString())" />
+
+                <!-- <img class="part-image" height="" :src="partImageSrc(order.itemNumber, order.orderNumber.toString())" @error="replaceWithNoImageImg(order.orderNumber.toString())"
+                v-if="currentSelectedOrderType === 'exchange'" /> -->
               </div>
               <div class="col-xxl-6">
                 <div class="row pb-3">
-                  <span class="part-title">{{order.partDescription}}</span>
+                  <span class="part-title">{{ order.partDescription }}</span>
                 </div>
                 <div class="row pb-3">
                   <div class="col-5">
                     <label>Customer Name</label>
-                    <div>{{order.customerName}}</div>
+                    <div>{{ order.customerName }}</div>
                   </div>
                   <div class="col">
                     <label>RO#</label>
-                    <div>{{order.roNumber ? order.roNumber : 'N/A'}}</div>
+                    <div>{{ order.roNumber ? order.roNumber : 'N/A' }}</div>
                   </div>
                   <div class="col">
                     <label>PO#</label>
-                    <div>{{order.poNumber ? order.poNumber : 'N/A'}}</div>
+                    <div>{{ order.poNumber ? order.poNumber : 'N/A' }}</div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-5">
                     <label>Ship Date</label>
-                    <div>{{dateTimeToShortDateString(order.shipDate)}}</div>
+                    <div>{{ dateTimeToShortDateString(order.shipDate) }}</div>
                   </div>
                   <div class="col">
                     <label>Tracking Number</label>
-                    <div><a :href="orderService.getOrderTrackingUrl(order.trackingNumber)" target="_blank">{{order.trackingNumber}}</a></div>
+                    <div><a :href="orderService.getOrderTrackingUrl(order.trackingNumber)"
+                        target="_blank">{{ order.trackingNumber }}</a></div>
                   </div>
                 </div>
 
@@ -333,17 +346,23 @@ async function onSubmit() {
             </thead>
             <tbody>
               <tr v-for="order of orderSearchResults" :key="order.orderNumber">
-                <th scope="row">{{dateTimeToShortDateString(order.orderDate)}}</th>
-                <td><a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)" target="_blank">{{order.orderNumber}}</a></td>
-                <td>{{order.itemNumber}}</td>
-                <td>{{order.roNumber}}</td>
-                <td>{{order.poNumber}}</td>
-                <td>{{order.customerName}}</td>
-                <td>{{dateTimeToShortDateString(order.shipDate)}}</td>
-                <td v-if="currentSelectedOrderType === 'exchange'">{{order.coreReturnedDate !== null ? 'Returned' : 'Pending'}}</td>
-                <td><a :href="orderService.getOrderTrackingUrl(order.trackingNumber)" target="_blank">{{order.trackingNumber}}</a></td>
-                <td><a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)" target="_blank"><IconDocumentViewRed></IconDocumentViewRed></a></td>
-              </tr>            
+                <th scope="row">{{ dateTimeToShortDateString(order.orderDate) }}</th>
+                <td><a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)"
+                    target="_blank">{{ order.orderNumber }}</a></td>
+                <td>{{ order.itemNumber }}</td>
+                <td>{{ order.roNumber }}</td>
+                <td>{{ order.poNumber }}</td>
+                <td>{{ order.customerName }}</td>
+                <td>{{ dateTimeToShortDateString(order.shipDate) }}</td>
+                <td v-if="currentSelectedOrderType === 'exchange'">{{ order.coreReturnedDate !== null ? 'Returned' :
+                    'Pending'
+                }}</td>
+                <td><a :href="orderService.getOrderTrackingUrl(order.trackingNumber)"
+                    target="_blank">{{ order.trackingNumber }}</a></td>
+                <td><a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)" target="_blank">
+                    <IconDocumentViewRed></IconDocumentViewRed>
+                  </a></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -408,7 +427,7 @@ async function onSubmit() {
     height: 15px;
     position: relative;
     right: 5px;
-   // top: 6px;
+    // top: 6px;
   }
 }
 
@@ -485,7 +504,13 @@ async function onSubmit() {
       width: 250px;
     }
 
-    @media screen and (max-width: 1399px) {
+    @media screen and (max-width: 950px){
+      .part-image {
+        width: 250px;
+      }
+    }
+
+    @media screen and (min-width: 951px) and (max-width: 1399px) {
       .part-image {
         width: 350px;
       }
@@ -539,7 +564,8 @@ async function onSubmit() {
 
   .top-space {
     padding: 1rem 0;
-    display: flex;    
+    display: flex;
+
     h4 {
       flex-grow: 1;
     }

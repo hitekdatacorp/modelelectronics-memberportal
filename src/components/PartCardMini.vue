@@ -24,6 +24,8 @@ watch(props, (newProps, oldProps) => {
 });
 
 let thereWasAnImageError = ref(false);
+let isFirstLoading = ref(true);
+
 let partImageSrc = computed(() => {
 
     if(thereWasAnImageError.value){
@@ -39,6 +41,7 @@ let partImageSrc = computed(() => {
 // this function runs when there was an error loading the part Image from the image repository. if there was an error, we replace the image with a 'no image' image.
 let replaceWithNoImageImg = function(){
     thereWasAnImageError.value = true;
+    isFirstLoading.value = false;
 }
 
 let availMessage = computed(() => {
@@ -80,7 +83,9 @@ let showRestrictedMessage = function () {
         <div class="part-card-header">
             <div class="row">
                 <div class="col-12 pb-3 d-flex justify-content-center">
-                    <img class="part-image" width="250" height="" :src="partImageSrc" @error="replaceWithNoImageImg()" />
+                    <img id="partImage" v-if="thereWasAnImageError === true" class="part-image" width="250" height="" src="@/assets/images/no-image.png"  />
+                    <img id="partImage" v-if="isFirstLoading || thereWasAnImageError === false" class="part-image" width="250" height="" :src="partImageSrc" @error="replaceWithNoImageImg()" />
+                    <!-- <img class="part-image" width="250" height="" :src="partImageSrc" @error="replaceWithNoImageImg()" /> -->
                 </div>
                 <div class="col-12">
                     <h4>Part # {{itemAvail.item.itemNumber}}</h4>

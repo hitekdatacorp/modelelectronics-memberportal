@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import "@/assets/scss/modelelectronics.scss";
 import { useAuthStore } from '@/stores/auth-store';
 import { IS_NJ_URL, IS_TX_URL } from '@/helpers/axiosconfig';
 import {useRoute} from 'vue-router';
 import { watch, ref } from 'vue';
+import 'bootstrap'
 
 const store = useAuthStore();
 const route = useRoute();
@@ -15,6 +15,7 @@ watch(() => route.meta.title, () => {
     pageHeader.value = route.meta.title as string;
 
 });
+
 
 let logoSrc = IS_TX_URL() ? 'logo-model-electronics-texas.svg' : 'logo-model-electronics.svg';
 
@@ -44,7 +45,10 @@ let logoSrc = IS_TX_URL() ? 'logo-model-electronics-texas.svg' : 'logo-model-ele
                         <!-- <a :href="PUBLIC_SITE_URL"> -->
                             <a href="/">
                             <!-- Logo -->                            
-                            <img id="site-identity" :src="'/member/src/assets/images/' + logoSrc" width="226"
+                            <img id="site-identity" v-if="IS_TX_URL()" src="@/assets/images/logo-model-electronics-texas.svg" width="226"
+                                height="63" alt="Model Electronics Logo">
+
+                            <img id="site-identity" v-if="!IS_TX_URL()" src="@/assets/images/logo-model-electronics.svg" width="226"
                                 height="63" alt="Model Electronics Logo">
                         </a>
                     </div>

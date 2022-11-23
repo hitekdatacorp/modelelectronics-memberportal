@@ -351,7 +351,7 @@ const v$ = useVuelidate(rules, props);
         </div>
       </div>
 
-      <div class="row">
+      <div class="row gy-3">
         <div class="col-md-12 col-lg-6 col-xl-4">
           <label for="contactName" class="form-label req">Contact Name</label>
           <input type="text" class="form-control" id="contactName" name="contactName" :value="contactName"
@@ -423,7 +423,7 @@ const v$ = useVuelidate(rules, props);
         </div>
       </div>
 
-      <div class="row gy-3 mb-3">
+      <div class="row mb-3 gy-3">
         <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-4">
           <label for="partSelect" class="form-label req">How did you obtain the part number?</label>
           <select class="form-select" id="partSelect" name="partSelect" aria-label="Part number questionairre"
@@ -474,7 +474,7 @@ const v$ = useVuelidate(rules, props);
         </Transition>
 
         <Transition>
-          <div class="col-md-12 col-lg-6 col-xl-4 col-xxl-3"
+          <div class="col-md-12 col-lg-6 col-xl-4 col-xxl-3" 
             v-if="props.orderType === OrderType.Exchange && isCore === true">
             <label for="poNumber" class="form-label req">PO #</label>
             <input type="text" class="form-control" id="poNumber" name="poNumber" :value="poNumber"
@@ -498,7 +498,7 @@ const v$ = useVuelidate(rules, props);
 
       </div>
 
-      <div class="row gy-3" v-if="props.orderType === OrderType.Exchange">
+      <div class="row mb-3 gy-3" v-if="props.orderType === OrderType.Exchange">
         <Transition>
           <div class="col-sm-12 col-md-12 col-lg-4 col-xxl-2" v-if="isWarrantyExchange === true">
             <label for="goodwill" class="form-label req">Is Goodwill?</label>
@@ -556,7 +556,7 @@ const v$ = useVuelidate(rules, props);
         </Transition>
       </div>
 
-      <div class="row gy-3 mb-3" v-if="props.orderType === OrderType.Exchange">
+      <div class="row mb-3 gy-3" v-if="props.orderType === OrderType.Exchange">
         <div class="col-12">
           <label for="complaint" class="form-label req">Customer Complaint</label> <span class="label-postscript">(Do
             not use INOP)</span>
@@ -568,7 +568,7 @@ const v$ = useVuelidate(rules, props);
           </div>
         </div>
       </div>
-      <div class="row" v-if="props.partIsRestricted">
+      <div class="row mb-3" v-if="props.partIsRestricted">
         <div class="col-12 col-lg-6">
             <label for="technicianName" class="form-label req">Technician's Name</label>
             <input type="text" class="form-control" id="hours" name="hours" :value="technicianName"
@@ -580,7 +580,7 @@ const v$ = useVuelidate(rules, props);
       </div>
 
 
-      <div class="row gy-3 pt-3 mb-3" v-if="props.orderType === OrderType.Exchange && props.isRadio">
+      <div class="row gy-3 mb-3" v-if="props.orderType === OrderType.Exchange && props.isRadio">
 
         <div class="col-sm-12 col-md-12 col-lg-4 col-xxl-2">
           <label for="isMediaStuck" class="form-label req">Is Media Stuck?</label>
@@ -659,7 +659,7 @@ const v$ = useVuelidate(rules, props);
         <h4>Shipping Information</h4>
       </div>
 
-      <div class="row mb-3">
+      <div class="row mb-3 gy-3">
         <div class="col-md-12 col-lg-6 col-xl-4">
           <label for="address" class="form-label req">Address</label>
           <input type="text" class="form-control" id="address" name="address" :value="address"
@@ -695,7 +695,7 @@ const v$ = useVuelidate(rules, props);
         </div>
       </div>
 
-      <div class="row  mb-3">
+      <div class="row mb-3 gy-3">
         <div class="col-12">
           <label class="form-label req" style="margin-bottom: 0;" for="shippingMethod">Choose Your Shipping Method
           </label>

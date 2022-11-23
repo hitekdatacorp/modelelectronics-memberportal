@@ -37,6 +37,8 @@ let availMessage = computed(() => {
 
 
 let thereWasAnImageError = ref(false);
+let isFirstLoading = ref(true);
+
 let partImageSrc = computed(() => {
 
     if(thereWasAnImageError.value){
@@ -52,6 +54,7 @@ let partImageSrc = computed(() => {
 // this function runs when there was an error loading the part Image from the image repository. if there was an error, we replace the image with a 'no image' image.
 let replaceWithNoImageImg = function(){
     thereWasAnImageError.value = true;
+    isFirstLoading.value = false;
 }
 
 let exchangePartPriceText = computed(() => {
@@ -142,8 +145,9 @@ async function purchasePart() {
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5">
-                    <img id="partImage" class="part-image" width="250" height="" :src="partImageSrc" @error="replaceWithNoImageImg()" />
+                <div class="col-md-5">                    
+                    <img id="partImage" v-if="thereWasAnImageError === true" class="part-image" width="250" height="" src="@/assets/images/no-image.png"  />
+                    <img id="partImage" v-if="isFirstLoading || thereWasAnImageError === false" class="part-image" width="250" height="" :src="partImageSrc" @error="replaceWithNoImageImg()" />
                 </div>
             </div>
             <div class="row pb-4" v-if="showRestrictedMessage()">
