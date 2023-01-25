@@ -17,7 +17,8 @@ const toast = useToast();
 const store = useAuthStore();
 
 let showSearchResult = ref(false);
-const partNumberSearchText = ref('');
+let partNumberSearchText = ref('');
+let partNumberSearched = ref('');
 
 let searchResult = ref<ItemAvailabilityResult | null>(null);
 
@@ -30,6 +31,7 @@ async function checkStock(e: Event) {
   console.log('checking stock...');
   isLoading.value = true;
   try {
+    partNumberSearched.value = partNumberSearchText.value;
     let itemResult = await getItemAvailability(partNumberSearchText.value);
     showSearchResult.value = true;
     searchResult.value = itemResult;
@@ -74,7 +76,7 @@ async function checkStock(e: Event) {
 
       <div class="row pb-2 pt-2" v-if="showSearchResult">
         <div class="col-12 search-results">
-          <h5 v-if="!searchResult?.itemExists">We couldn't find <b>part # {{partNumberSearchText}}</b>            
+          <h5 v-if="!searchResult?.itemExists">We couldn't find <b>part # {{partNumberSearched}}</b>            
           </h5>
           <h5 v-if="searchResult?.itemExists">We found 1 matching part</h5>          
         </div>

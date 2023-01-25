@@ -12,6 +12,8 @@ interface ImportMetaEnv {
   readonly VITE_INVOICE_TRACKING_URL_FORMAT_UPS: string;  
   readonly VITE_INVOICE_TRACKING_URL_FORMAT_FEDEX: string;
   readonly VITE_IMAGE_REPOSITORY_URL: string;
+
+  readonly VITE_REPAIRFORM_URL: string;
 }
 
 interface ImportMeta {

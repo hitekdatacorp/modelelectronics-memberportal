@@ -1,5 +1,9 @@
 
+<script setup lang="ts">
 
+const REPAIRFORM_URL = import.meta.env.VITE_REPAIRFORM_URL;
+
+</script>
 
 
 
@@ -11,7 +15,7 @@
       you send your product back.
     </div>
     <div class="pb-5">
-      <a href="https://localhost:44368/media/itwfmyxk/repair-form.pdf" target="_blank" class="btn btn-primary btn-download" >Download The Repair Form</a>
+      <a :href="REPAIRFORM_URL" target="_blank" class="btn btn-primary btn-download" >Download The Repair Form</a>
     </div>
     <div class="addr pb-5">
       <b>Ship repairs to</b>

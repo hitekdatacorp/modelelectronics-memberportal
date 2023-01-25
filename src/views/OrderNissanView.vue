@@ -244,10 +244,10 @@ const v$ = useVuelidate(rules, order);
               <div class="form-section-header mb-3">
                 <div class="over-score">&nbsp;</div>
                 <h4>Vehicle Odometer</h4>
-                <NotificationCard>
-                  <!-- <span style="font-size: 1em; font-family: Inter-Bold; font-weight: bold;">GM Requirement: </span>
-                  <span>If unit is on restriction you'll be automatically forwarded to the correct PQC survey.</span> -->
-                </NotificationCard>
+                <!-- <NotificationCard>
+                  <span style="font-size: 1em; font-family: Inter-Bold; font-weight: bold;">GM Requirement: </span>
+                  <span>If unit is on restriction you'll be automatically forwarded to the correct PQC survey.</span>
+                </NotificationCard> -->
               </div>
 
               <div class="row mb-3 gy-3">
@@ -280,10 +280,10 @@ const v$ = useVuelidate(rules, order);
               <div class="form-section-header mb-3">
                 <div class="over-score">&nbsp;</div>
                 <h4>Customer Information</h4>
-                <NotificationCard>
-                  <!-- <span style="font-size: 1em; font-family: Inter-Bold; font-weight: bold;">GM Requirement: </span>
-                  <span>If unit is on restriction you'll be automatically forwarded to the correct PQC survey.</span> -->
-                </NotificationCard>
+                <!-- <NotificationCard>
+                  <span style="font-size: 1em; font-family: Inter-Bold; font-weight: bold;">GM Requirement: </span>
+                  <span>If unit is on restriction you'll be automatically forwarded to the correct PQC survey.</span>
+                </NotificationCard> -->
 
                 <div class="row mb-3">
                   <div class="col-xs-6 col-md-6 col-lg-5">

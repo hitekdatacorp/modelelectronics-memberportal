@@ -74,7 +74,7 @@ const props = defineProps({
   poNumber: { type: String, required: true },
   serviceManagerFullName: { type: String, required: true },
   deliveryDate: { type: Date, required: false },
-  hours: { required: true },
+  hours: { required: false },
   customerComplaint: { type: String, required: true },
   address: { type: String, required: true },
   city: { type: String, required: true },
@@ -300,7 +300,7 @@ const rules = {
 
   shippingMethod: { required },
 
-  hours: {  requiredIfGoodwill: helpers.withMessage('Field is required when Is Goodwill is Yes', requiredIf(() => props.isGoodwill)) },
+  //hours: {  requiredIfGoodwill: helpers.withMessage('Field is required when Is Goodwill is Yes', requiredIf(() => props.isGoodwill)) },
 
   //hours: { checkIsDecimal: helpers.withMessage('Hours must be a number.', checkIsDecimal) },
   customerComplaint: { requiredIfExchange: helpers.withMessage('This field is required', requiredIf(() =>  props.orderType === OrderType.Exchange)) },
@@ -546,8 +546,8 @@ const v$ = useVuelidate(rules, props);
 
         <Transition>
           <div class="col-sm-6 col-md-6 col-lg-2 col-xxl-2" v-if="isGoodwill === true">
-            <label for="hours" class="form-label req">Hours</label>
-            <input type="text" class="form-control" id="hours" name="hours" :value="hours"
+            <label for="hours" class="form-label">Hours</label>
+            <input type="text" class="form-control" id="hours" name="hours" :value="hours" placeholder="Cluster Only"
               @input="$emit('update:hours', ($event.target as HTMLInputElement).value)" @blur="v$.hours.$touch" />
             <div class="input-errors" v-for="error of v$?.hours?.$errors" :key="error.$uid">
               <div class="error-msg">{{ error.$message }}</div>

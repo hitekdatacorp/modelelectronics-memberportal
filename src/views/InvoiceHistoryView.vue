@@ -264,7 +264,8 @@ async function onSubmit() {
           </div>
         </div>
 
-        <div class="bottom-space" v-if="gridViewType === '1' && !isLoading">
+        <div class="grid-view bottom-space" v-if="gridViewType === '1' && !isLoading">
+
           <div class="invoice-grid-box" v-for="order of orderSearchResults" :key="order.orderNumber">
             <div class="invoice-header">
               <div>
@@ -308,15 +309,19 @@ async function onSubmit() {
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-5">
+                  <div class="col-3">
                     <label>Ship Date</label>
                     <div>{{ dateTimeToShortDateString(order.shipDate) }}</div>
-                  </div>
+                  </div>                 
                   <div class="col">
                     <label>Tracking Number</label>
                     <div><a :href="orderService.getOrderTrackingUrl(order.trackingNumber)"
                         target="_blank">{{ order.trackingNumber }}</a></div>
                   </div>
+                  <div class="col-3" v-if="currentSelectedOrderType === 'exchange'">
+                    <label>Core Status</label>
+                    <div>{{ order.coreReturnedDate !== null ? 'Returned' : 'Pending'}}</div>
+                  </div>                  
                 </div>
 
               </div>

@@ -9,15 +9,18 @@ import { required, email, helpers, maxLength, requiredIf, integer  } from '@vuel
 import {usPhoneNumber, vinNumber} from '@/helpers/validators';
 import * as surveyService from '@/services/survey-service';
 import * as orderService from '@/services/order-service';
+import router from '@/router';
 
 const props = defineProps<{orderId?: number}>();
 
-onMounted(async () => {
+let showConfirmation = ref(false);
+
+onMounted(async () => {  
   if(props.orderId) {
 
     var order = await orderService.getOrder(props.orderId);
     
-    survey.value.serviceDate = new Date().toDateString();
+    survey.value.serviceDate = new Date().toISOString(); //new Date().toDateString();
     survey.value.deliveryDate = order.deliveryDate ?? '';
     survey.value.customerComplaint = order.complaint ?? '';
     survey.value.mileage = order.mileage?.toString() ?? '';
@@ -96,6 +99,14 @@ async function onSubmit() {
 
   try {
     let data = await surveyService.postClusterSurvey(survey.value);  
+
+    if(props.orderId){
+      // send user to order confirmation page      
+      router.push(`/advexchange/order/2/${survey.value.partNumber}/confirm/${props.orderId}`);      
+    } else {
+      // return generic success message?
+      showConfirmation.value = true;
+    }
   } catch {
 
   }  
@@ -103,7 +114,10 @@ async function onSubmit() {
 </script>
 
 <template>
-  <main class="cluster">
+  <main class="cluster" v-if="showConfirmation">  
+    <h2>Thank you for your submission</h2>
+  </main>
+  <main class="cluster" v-if="!showConfirmation">
     <h3>GM PQC Cluster Survey</h3>
     <div style="width: 100%; text-align: center;">
       <span class="req-label">Required Field</span>
