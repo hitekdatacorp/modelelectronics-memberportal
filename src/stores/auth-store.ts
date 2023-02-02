@@ -1,5 +1,5 @@
 
-import { DealerRoles } from '@/types/enumtypes';
+import { AccountTypes, DealerRoles } from '@/types/enumtypes';
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import * as customerService from '../services/customer-service'
@@ -43,6 +43,9 @@ export const useAuthStore = defineStore({
     city: (state) => state.profile?.customer?.city,
     state: (state) => state.profile?.customer?.state,
     zip: (state) => state.profile?.customer?.zip,
+    isAccountingLogin: () => {
+      return state.profile?.customer?.accountType == AccountTypes.Accounting;
+    },
     isGMDealer: () => {
       return state.profile?.customer?.dealerManufacturer === DealerRoles.GM;
     },

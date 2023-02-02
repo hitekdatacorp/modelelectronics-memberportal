@@ -27,3 +27,8 @@ export enum DealerRoles {
     Other = "OTHER",
     None = "NONE"
 }
+
+export enum AccountTypes {
+    Main = "MAIN",
+    Accounting = "ACC"
+}

@@ -6,6 +6,13 @@ import { useAuthStore } from '@/stores/auth-store';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  },
   routes: [
     // {
     //   path: '/',
@@ -301,6 +308,11 @@ router.beforeEach(async (to) => {
   if (authRequired && (!authStore.profile || !authStore.profile.token)) {
     authStore.setReturnUrl(to.fullPath);
     return '/';
+  }
+
+  const accountingAccessPages = ['/invoicehist']; // the only pages that "Accounting" logins are allowed to access
+  if(authRequired && authStore.isAccountingLogin && !accountingAccessPages.includes(to.path)){
+    return '/invoicehist';
   }
 });
 

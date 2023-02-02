@@ -70,9 +70,10 @@ export class CustomerModel {
     salesTerritory: string;
     salesRep: string;
     dealerManufacturer: string;
+    accountType: string;
 
     constructor(customerNumber: string, friendlyCustomerNumber: string, name: string, phone: string, contactName: string, email: string, 
-        address:string, city: string, state: string, zip: string, salesTerritory: string, salesRep: string, dealerManufacturer: string) {
+        address:string, city: string, state: string, zip: string, salesTerritory: string, salesRep: string, dealerManufacturer: string, accountType: string) {
         this.customerNumber = customerNumber;
         this.friendlyCustomerNumber = friendlyCustomerNumber;
         this.name = name;
@@ -87,6 +88,7 @@ export class CustomerModel {
         this.salesTerritory = salesTerritory;
         this.salesRep = salesRep;
         this.dealerManufacturer = dealerManufacturer;
+        this.accountType = accountType;
     }
 }
 
@@ -130,6 +132,7 @@ export interface IBaseItemAvailabilityResult {
 }
 
 export class BaseItemAvailabilityResult {
+    siteId: string;
     item: ItemModel;
     itemExists: boolean;
     remanNumber: string;
@@ -138,6 +141,7 @@ export class BaseItemAvailabilityResult {
     isRadio: boolean;
 
     constructor(
+        siteId: string,
         item: ItemModel,
         itemExists: boolean,
         remanNumber: string,
@@ -145,6 +149,7 @@ export class BaseItemAvailabilityResult {
         alternateItems: string[],
         isRadio: boolean
     ) {
+        this.siteId = siteId
         this.item = item
         this.itemExists = itemExists
         this.remanNumber = remanNumber
@@ -196,6 +201,7 @@ export class ItemAvailabilityResult extends BaseItemAvailabilityResult implement
     }
 
     constructor(
+        siteId: string,
         item: ItemModel,
         itemExists: boolean,
         remanNumber: string,
@@ -208,7 +214,7 @@ export class ItemAvailabilityResult extends BaseItemAvailabilityResult implement
         mileageToBeSetAtDealership: boolean,
         isRadio: boolean
     ) {
-        super(item, itemExists, remanNumber, yearRange, alternateItems, isRadio)
+        super(siteId, item, itemExists, remanNumber, yearRange, alternateItems, isRadio)
         this.isOnBackorder = isOnBackorder
         this.estimatedDeliveryDate = estimatedDeliveryDate
         this.exchangeAvailability = exchangeAvailability

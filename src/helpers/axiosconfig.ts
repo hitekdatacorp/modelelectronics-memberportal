@@ -47,12 +47,9 @@ http.interceptors.request.use( config => {
     return config;
 });
 
-http.interceptors.response.use( resp => {    
-    //app.config.globalProperties.$Progress.finish(); // for every request finish the progress bar    
 
-   return resp;
-}, error => {
-   // app.config.globalProperties.$Progress.fail(); // for every request error fail  the progress
+let responseErrorInterceptor = function(error: any){
+    // app.config.globalProperties.$Progress.fail(); // for every request error fail  the progress
     const toast = useToast();
 
     // check for 'unauthorized response'.
@@ -90,7 +87,36 @@ http.interceptors.response.use( resp => {
         }                
     }
     return Promise.reject(error);
-});
+}
+
+http.interceptors.response.use(resp => {    
+    //app.config.globalProperties.$Progress.finish(); // for every request finish the progress bar    
+
+   return resp;
+}, responseErrorInterceptor);
 
 // create a version of the http service without the global interceptors added. This is useful in ajax operations we want to perform 'quietly' without the interceptors interferring.
 export const httpWithoutInterceptors = axios.create(axiosConfig);
+
+// create a version of the http service that sets the "TENANT" to the alternate site. i.e. if currently on the NJ website, this will set the TENANT to the TX website. This is mainly to perform cross site inventory lookups
+export const httpAlternateSite = axios.create(axiosConfig);
+
+httpAlternateSite.interceptors.request.use(config => {    
+
+    // app.config.globalProperties.$Progress.start(); // for every request start  the progress bar    
+ 
+     if(config && config.url && config.headers) {
+         const authStore = useAuthStore();
+         // set the auth header and pass the jwt token
+         config.headers['Authorization'] = authStore.authHeader(config.baseURL!)['Authorization'] || '';
+ 
+         // swapping the tenant here. if nj then use tx and vice versa.
+         config.headers['X_SITE_TENANT'] = IS_NJ_URL() ? 'TX' : (IS_TX_URL() ? 'NJ' : 'TX');
+     }
+     return config;
+ });
+ httpAlternateSite.interceptors.response.use(resp => {    
+    //app.config.globalProperties.$Progress.finish(); // for every request finish the progress bar    
+
+   return resp;
+}, responseErrorInterceptor);

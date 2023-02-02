@@ -80,24 +80,24 @@ let logoSrc = IS_TX_URL() ? 'logo-model-electronics-texas.svg' : 'logo-model-ele
                     <div class="collapse navbar-collapse" id="navbarToggler" style="justify-content: center; width: 100%;" v-if="store.isAuthenticated() && !store.isNissanDealer">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <RouterLink class="nav-link" to="/advexchange"><span>Advanced Exchange</span>
+                                <RouterLink class="nav-link" to="/advexchange" v-if="!store.isAccountingLogin"><span>Advanced Exchange</span>
                                 </RouterLink>
                             </li>
                             <li class="nav-item" v-if="IS_NJ_URL()">
-                                <RouterLink class="nav-link" to="/outrightpurchase"><span>Outright Purchase</span>
+                                <RouterLink class="nav-link" to="/outrightpurchase" v-if="!store.isAccountingLogin"><span>Outright Purchase</span>
                                 </RouterLink>
                             </li>
                             <li class="nav-item">
                                 <RouterLink class="nav-link" to="/invoicehist"><span>Invoice History</span></RouterLink>
                             </li>
                             <li class="nav-item" v-if="IS_NJ_URL()">
-                                <RouterLink class="nav-link" to="/repairform"><span>Repair Form</span></RouterLink>
+                                <RouterLink class="nav-link" to="/repairform" v-if="!store.isAccountingLogin"><span>Repair Form</span></RouterLink>
                             </li>
                             <li class="nav-item" v-if="IS_NJ_URL()">
-                                <RouterLink class="nav-link" to="/radiosurvey"><span>Radio Survey</span></RouterLink>
+                                <RouterLink class="nav-link" to="/radiosurvey" v-if="!store.isAccountingLogin"><span>Radio Survey</span></RouterLink>
                             </li>
                             <li class="nav-item" v-if="IS_NJ_URL()">
-                                <RouterLink class="nav-link" to="/clustersurvey"><span>Cluster Survey</span>
+                                <RouterLink class="nav-link" to="/clustersurvey" v-if="!store.isAccountingLogin"><span>Cluster Survey</span>
                                 </RouterLink>
                             </li>
                         </ul>

@@ -32,7 +32,7 @@ async function checkStock(e: Event) {
   isLoading.value = true;
   try {
     partNumberSearched.value = partNumberSearchText.value;
-    let itemResult = await getItemAvailability(partNumberSearchText.value);
+    let itemResult = await getItemAvailability(partNumberSearchText.value, false);
     showSearchResult.value = true;
     searchResult.value = itemResult;
 

@@ -1,16 +1,19 @@
 
 import { ItemAvailabilityResult } from '../types/models'
-import {http, httpWithoutInterceptors} from '@/helpers/axiosconfig'
+import {IS_NJ_URL, IS_TX_URL, http, httpAlternateSite, httpWithoutInterceptors} from '@/helpers/axiosconfig'
 import axios from 'axios';
+
 import _ from 'lodash';
 
 
-export async function getItemAvailability(partNumber: string): Promise<ItemAvailabilityResult> {    
+export async function getItemAvailability(partNumber: string, lookupAlternateSite: boolean = false): Promise<ItemAvailabilityResult> {    
+    // lookupAlternateSite means check the other site for availability. i.e. if we're in the NJ version of the website then go lookup TX and vice versa.
+ 
     try {
-        const { data, status } = await http.get<ItemAvailabilityResult>(`inventory/${partNumber}/avail`);
+        const { data, status } = lookupAlternateSite ? await httpAlternateSite.get<ItemAvailabilityResult>(`inventory/${partNumber}/avail`) : await http.get<ItemAvailabilityResult>(`inventory/${partNumber}/avail`);
         console.debug(`getItemAvailability returned status: ${status}`);
 
-        const result = new ItemAvailabilityResult(data.item, data.itemExists, data.remanNumber, data.yearRange, data.alternateItems, data.isOnBackorder, data.estimatedDeliveryDate, data.exchangeAvailability, data.purchaseAvailability, data.mileageToBeSetAtDealership, data.isRadio);
+        const result = new ItemAvailabilityResult(data.siteId, data.item, data.itemExists, data.remanNumber, data.yearRange, data.alternateItems, data.isOnBackorder, data.estimatedDeliveryDate, data.exchangeAvailability, data.purchaseAvailability, data.mileageToBeSetAtDealership, data.isRadio);
 
         return result;
     } catch (error) {
@@ -24,9 +27,9 @@ export async function getItemAvailability(partNumber: string): Promise<ItemAvail
     }    
 }
 
-export async function getItemAvailabilityForPurchase(partNumber: string): Promise<ItemAvailabilityResult> {    
+export async function getItemAvailabilityForPurchase(partNumber: string, lookupAlternateSite: boolean = false): Promise<ItemAvailabilityResult> {    
     try {
-        const { data, status } = await http.get<ItemAvailabilityResult>(`inventory/${partNumber}/purchaseavail`);
+        const { data, status } = lookupAlternateSite ? await httpAlternateSite.get<ItemAvailabilityResult>(`inventory/${partNumber}/purchaseavail`) : await http.get<ItemAvailabilityResult>(`inventory/${partNumber}/purchaseavail`);
         console.debug(`getItemAvailability returned status: ${status}`);
 
         return data;
