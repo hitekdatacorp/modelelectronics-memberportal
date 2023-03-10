@@ -89,7 +89,7 @@ async function checkStock(e: Event) {
 
       <div class="row pt-4" v-if="showSearchResult">
         <div class="col-12 search-results">         
-          <h5 class="alt-text" v-if="searchResult?.itemExists && searchResult.alternateItems?.length">If the top item is out of stock you may order any of the alternate parts listed below as well.</h5>
+          <h5 class="alt-text" v-if="!searchResult?.exchangeAvailability?.isInStock && searchResult?.itemExists && searchResult.alternateItems?.length">If the top item is out of stock you may order any of the alternate parts listed below as well.</h5>
         </div>
       </div>
       
