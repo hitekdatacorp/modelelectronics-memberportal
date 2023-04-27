@@ -31,7 +31,7 @@ let customerName = ref(null);
 let isLoading = ref(false);
 let showSearch = ref(true);
 let orderSearchResults = ref<Array<IInvoiceHistoryModel> | null>(null);
-let gridViewType = ref("1");
+let gridViewType = store.isGMOrOtherDealer ? ref("1") : ref("2");
 
 const IMAGES_REPOSITORY_URL: string = import.meta.env.VITE_IMAGE_REPOSITORY_URL;
 
@@ -188,7 +188,7 @@ async function onSubmit() {
                 </div>
               </div>
               <hr />
-              <div class="row">
+              <div class="row" v-if="store.isGMOrOtherDealer">
                 <div class="col order-type" style="display: flex; justify-content: center;">
                   <div class="form-check form-check-inline form-radio-button">
                     <input type="radio" class="form-check-input" name="orderType" id="rdoExchanges" autocomplete="off"
@@ -325,7 +325,7 @@ async function onSubmit() {
                 </div>
 
               </div>
-              <div class="col-xxl-3 d-flex justify-content-xl-right justify-content-center align-items-start">
+              <div class="col-xxl-3 d-flex justify-content-xl-right justify-content-center align-items-start" v-if="!store.isNissanDealer">
                 <a :href="orderService.getOrderInvoiceUrl(order?.orderNumber, orderType)"
                   class="btn btn-primary btn-invoice" target="_blank">View Invoice</a>
               </div>
@@ -352,8 +352,11 @@ async function onSubmit() {
             <tbody>
               <tr v-for="order of orderSearchResults" :key="order.orderNumber">
                 <th scope="row">{{ dateTimeToShortDateString(order.orderDate) }}</th>
-                <td><a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)"
-                    target="_blank">{{ order.orderNumber }}</a></td>
+                <td v-if="store.isGMOrOtherDealer">
+                  <a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)"
+                    target="_blank" >{{ order.orderNumber }}</a>                   
+                </td>
+                <td v-else>{{ order.orderNumber }}</td>
                 <td>{{ order.itemNumber }}</td>
                 <td>{{ order.roNumber }}</td>
                 <td>{{ order.poNumber }}</td>
@@ -364,7 +367,7 @@ async function onSubmit() {
                 }}</td>
                 <td><a :href="orderService.getOrderTrackingUrl(order.trackingNumber)"
                     target="_blank">{{ order.trackingNumber }}</a></td>
-                <td><a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)" target="_blank">
+                <td><a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)" target="_blank" v-if="!store.isNissanDealer">
                     <IconDocumentViewRed></IconDocumentViewRed>
                   </a></td>
               </tr>

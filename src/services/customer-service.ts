@@ -113,3 +113,27 @@ export async function deleteCustomer(id: string): Promise<void | number> {
         }
     }    
 }
+
+
+export async function changeCustomerPassword(customerNumber: string, password: string, noGlobalErrorHandling?: boolean): Promise<void | number> {    
+    try {
+
+        let web = noGlobalErrorHandling ? httpWithoutInterceptors : http;
+
+        const {status} = await web.post(`Customers/${customerNumber}/changepassword`, {            
+            password: password
+        });
+
+        console.debug(`changeCustomerPassword returned status: ${status}`);
+
+        
+    } catch (error) { // here we catch any low level errors like network errors and the like. Any server error/exception will be returned as a json object and won't be thrown here as an exception
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            return Promise.reject(error.message);
+        } else {
+            console.log('unexpected error: ', error);
+            return Promise.reject('An unexpected error occurred');
+        }
+    }    
+}

@@ -289,3 +289,11 @@ export interface IOrderModel {
 export interface CreateOrderResult {
     orderId: number;
 }
+
+export interface IBackOrderedPart {    
+    partNumber: string;
+    friendlyPartNumber: string;
+    qtyOnBackOrder: number | null;
+    isOnBackorder: boolean;
+    expectedDeliveryDate: Date | null;
+}

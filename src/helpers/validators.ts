@@ -11,3 +11,9 @@ const vinRegex = /^[a-hj-npr-z0-9\-]{17}/im
 export const vinNumber = (vin: string) => {  
   return vinRegex.test(vin);
 }
+
+
+const passwordRegex = /^[a-hj-npr-z0-9\-]{17}/im
+export const passwordValidator = (vin: string) => {  
+  return passwordRegex.test(vin);
+}

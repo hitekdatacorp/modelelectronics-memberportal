@@ -3,10 +3,11 @@
  import { reactive, watch, ref } from 'vue'
  import { useToast } from "vue-toastification";
  import { useAuthStore } from '@/stores/auth-store';
- import router from '@/router'
+ import { useRouter } from 'vue-router';
 
  const toast = useToast();
  const store = useAuthStore();
+ const router = useRouter();
 
 let customerNumber = ref('');
 let password = ref('');
@@ -21,6 +22,14 @@ async function login(e: Event) {
   customerNumber.value = '';
   password.value = '';
 
+
+  if(response.userMustChangePassword){
+    console.debug('user must change password');    
+    router.push('changepassword');
+    toast.warning('You must change your password before continuing.');
+    return;
+  }
+
   // go to member landing page which is the check stock view
   if(store.returnUrl){
     console.debug('return url fullpath is: ' + store.returnUrl);
@@ -32,7 +41,7 @@ async function login(e: Event) {
     console.debug('going to advanced exchange page')
 
     if(!store.isNissanDealer){
-      router.push('/advexchange');
+      router.push('advexchange');
     } else {
       router.push('speedometer');
     }

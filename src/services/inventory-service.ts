@@ -1,8 +1,10 @@
 
-import { ItemAvailabilityResult } from '../types/models'
+import { ItemAvailabilityResult, type IBackOrderedPart, type IInvoiceHistoryModel } from '../types/models'
 import {http, httpWithoutInterceptors} from '@/helpers/axiosconfig'
 import axios from 'axios';
 import _ from 'lodash';
+import { dateToUrlReadyParam } from '@/helpers/formatters';
+
 
 
 export async function getItemAvailability(partNumber: string): Promise<ItemAvailabilityResult> {    
@@ -41,3 +43,22 @@ export async function getItemAvailabilityForPurchase(partNumber: string): Promis
     }    
 }
 
+
+export async function getNissanBackOrderedParts(salesRepId: string): Promise<Array<IBackOrderedPart>> {      
+
+    try {
+        const { data, status } = await http.get<Array<IBackOrderedPart>>(`inventory/nissanbo/${salesRepId}`);
+
+        console.debug(`getNissanBackOrderedParts returned status: ${status}`);
+
+       return data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            return Promise.reject(error.message);
+        } else {
+            console.log('unexpected error: ', error);
+            return Promise.reject('An unexpected error occurred');
+        }
+    }    
+}

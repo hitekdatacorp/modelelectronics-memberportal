@@ -43,6 +43,7 @@ export const useAuthStore = defineStore({
     city: (state) => state.profile?.customer?.city,
     state: (state) => state.profile?.customer?.state,
     zip: (state) => state.profile?.customer?.zip,
+    salesRep: (state) => state.profile?.customer?.salesRep,
     isGMDealer: () => {
       return state.profile?.customer?.dealerManufacturer === DealerRoles.GM;
     },

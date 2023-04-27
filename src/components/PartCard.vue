@@ -27,7 +27,7 @@ watch(props, (newProps, oldProps) => {
 });
 
 let availMessage = computed(() => {
-    if (itemAvail.value && itemAvail.value?.exchangeAvailability?.isInStock) {
+    if (itemAvail.value && (itemAvail.value?.exchangeAvailability?.isInStock || itemAvail.value?.purchaseAvailability?.isInStock)) {
         return "Is In Stock";
     } else if (itemAvail.value?.showOnBackorderMessage()) {
         return "Available on Backorder";

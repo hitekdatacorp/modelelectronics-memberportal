@@ -45,7 +45,7 @@ let replaceWithNoImageImg = function(){
 }
 
 let availMessage = computed(() => {
-    if (itemAvail.value && itemAvail.value?.exchangeAvailability?.isInStock) {
+    if (itemAvail.value && (itemAvail.value?.exchangeAvailability?.isInStock || itemAvail.value?.purchaseAvailability?.isInStock)) {
         return "Is In Stock";
     } else if (itemAvail.value?.showOnBackorderMessage()) {
         return "Available on Backorder";
@@ -96,12 +96,12 @@ let showRestrictedMessage = function () {
         <div class="part-card-body" style="font-size: 0.8rem !important">
             <div class="row pb-4">
                 <div class="col">
-                    <div class="row pb-4" v-show="itemAvail.exchangeAvailability?.isInStock">
+                    <div class="row pb-4" v-show="itemAvail.exchangeAvailability?.isInStock || itemAvail.purchaseAvailability?.isInStock">
                         <div class="col-12">
                             <InStockIcon :in-stock-message="availMessage" />
                         </div>
                     </div>
-                    <div class="row pb-4" v-show="!itemAvail.exchangeAvailability?.isInStock">
+                    <div class="row pb-4" v-show="!itemAvail.exchangeAvailability?.isInStock && !itemAvail.purchaseAvailability?.isInStock">
                         <div class="col-12">
                             <OutOfStockIcon />
                         </div>
@@ -154,9 +154,9 @@ let showRestrictedMessage = function () {
             </div>
 
             <div class="row justify-content-start">
-                <div class="col-6 col-md-4">
+                <div class="col-6 col-md-4" v-if="!store.isNissanDealer">
                     <label>EXCHANGE PRICE</label>
-                    <div class="price">{{exchangePartPriceText}}</div>                    
+                    <div class="price">{{exchangePartPriceText}}</div>
                 </div>
                 <div class="col-6 col-md-4">
                     <label>PURCHASE PRICE</label>
