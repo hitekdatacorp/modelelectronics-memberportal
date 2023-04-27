@@ -105,12 +105,15 @@ export const useAuthStore = defineStore({
       this.profile = null;
       this.returnUrl = null;
       localStorage.removeItem('user');
-      if(router !== null && router !== undefined){
-        router.push('/');
-      } else {
-        // try the window object
-        window.location.href = '/';
-      }
+
+      window.location.href = '/';
+
+      // if(router !== null && router !== undefined){
+      //   router.push('/');
+      // } else {
+      //   // try the window object
+        
+      // }
     },
 
     setReturnUrl(url: string) {

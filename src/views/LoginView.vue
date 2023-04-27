@@ -3,11 +3,14 @@
  import { reactive, watch, ref } from 'vue'
  import { useToast } from "vue-toastification";
  import { useAuthStore } from '@/stores/auth-store';
- import { useRouter } from 'vue-router';
+import router from '@/router';
+ //import { useRouter } from 'vue-router';
+
+
 
  const toast = useToast();
  const store = useAuthStore();
- const router = useRouter();
+ //const router = useRouter();
 
 let customerNumber = ref('');
 let password = ref('');
