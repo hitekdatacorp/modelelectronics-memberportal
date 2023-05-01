@@ -475,7 +475,7 @@ const v$ = useVuelidate(rules, props);
 
         <Transition>
           <div class="col-md-12 col-lg-6 col-xl-4 col-xxl-3" 
-            v-if="props.orderType === OrderType.Exchange && isCore === true">
+            v-if="(props.orderType === OrderType.Exchange && isCore === true) || (props.orderType === OrderType.Purchase)">
             <label for="poNumber" class="form-label req">PO #</label>
             <input type="text" class="form-control" id="poNumber" name="poNumber" :value="poNumber"
               @input="$emit('update:poNumber', ($event.target as HTMLInputElement).value)" @blur="v$.poNumber.$touch" />
