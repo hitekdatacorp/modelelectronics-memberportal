@@ -1,6 +1,6 @@
 
 import type {CreateOrderResult, IInvoiceHistoryModel, IOrderModel} from '../types/models';
-import {http, httpWithoutInterceptors} from '@/helpers/axiosconfig'
+import {http, httpWithoutInterceptors, IS_TX_URL} from '@/helpers/axiosconfig'
 import axios from 'axios';
 import _ from 'lodash';
 import { dateToUrlReadyParam } from '@/helpers/formatters';
@@ -124,7 +124,9 @@ export async function getOrderHistory(orderType: OrderType, customerNumber: stri
     }    
 }
 
-const VITE_INVOICEGENERATOR_URL = import.meta.env.VITE_INVOICEGENERATOR_URL;
+//const VITE_INVOICEGENERATOR_URL = import.meta.env.VITE_INVOICEGENERATOR_URL;
+
+const VITE_INVOICEGENERATOR_URL = IS_TX_URL() ? import.meta.env.VITE_INVOICEGENERATOR_URL_TEXAS : import.meta.env.VITE_INVOICEGENERATOR_URL;
 
 export function getOrderInvoiceUrl(orderNumber: number, orderType: OrderType) {
 

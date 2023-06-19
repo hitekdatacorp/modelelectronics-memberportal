@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   readonly VITE_NJ_SITE_URL: string;
   readonly VITE_TX_SITE_URL: string;  
   readonly VITE_INVOICEGENERATOR_URL: string;
+  readonly VITE_INVOICEGENERATOR_URL_TEXAS: string;
   readonly VITE_IMAGE_REPOSITORY_URL: string;
   readonly VITE_REPAIRFORM_URL: string;
 
