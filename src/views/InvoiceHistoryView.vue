@@ -311,7 +311,7 @@ async function onSubmit() {
                 <div class="row">
                   <div class="col-3">
                     <label>Ship Date</label>
-                    <div>{{ dateTimeToShortDateString(order.shipDate) }}</div>
+                    <div>{{ order.shipDate && dateTimeToShortDateString(order.shipDate) || 'N/A' }}</div>
                   </div>                 
                   <div class="col">
                     <label>Tracking Number</label>
@@ -325,7 +325,7 @@ async function onSubmit() {
                 </div>
 
               </div>
-              <div class="col-xxl-3 d-flex justify-content-xl-right justify-content-center align-items-start" v-if="!store.isNissanDealer">
+              <div class="col-xxl-3 d-flex justify-content-xl-right justify-content-center align-items-start" v-if="!store.isNissanDealer && order?.shipDate">
                 <a :href="orderService.getOrderInvoiceUrl(order?.orderNumber, orderType)"
                   class="btn btn-primary btn-invoice" target="_blank">View Invoice</a>
               </div>
@@ -352,7 +352,7 @@ async function onSubmit() {
             <tbody>
               <tr v-for="order of orderSearchResults" :key="order.orderNumber">
                 <th scope="row">{{ dateTimeToShortDateString(order.orderDate) }}</th>
-                <td v-if="store.isGMOrOtherDealer">
+                <td v-if="store.isGMOrOtherDealer && order.shipDate">
                   <a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)"
                     target="_blank" >{{ order.orderNumber }}</a>                   
                 </td>
@@ -361,13 +361,13 @@ async function onSubmit() {
                 <td>{{ order.roNumber }}</td>
                 <td>{{ order.poNumber }}</td>
                 <td>{{ order.customerName }}</td>
-                <td>{{ dateTimeToShortDateString(order.shipDate) }}</td>
+                <td>{{ order.shipDate && dateTimeToShortDateString(order.shipDate) || 'N/A' }}</td>
                 <td v-if="currentSelectedOrderType === 'exchange'">{{ order.coreReturnedDate !== null ? 'Returned' :
                     'Pending'
                 }}</td>
                 <td><a :href="orderService.getOrderTrackingUrl(order.trackingNumber)"
                     target="_blank">{{ order.trackingNumber }}</a></td>
-                <td><a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)" target="_blank" v-if="!store.isNissanDealer">
+                <td><a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)" target="_blank" v-if="!store.isNissanDealer && order.shipDate">
                     <IconDocumentViewRed></IconDocumentViewRed>
                   </a></td>
               </tr>

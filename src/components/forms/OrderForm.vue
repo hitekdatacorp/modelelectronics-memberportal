@@ -290,8 +290,8 @@ const rules = {
   mileage: { required, integer: helpers.withMessage('Mileage must be a valid number. Please remove any commas or decimals or any other special character', integer) },
   vin: { vinNumber: helpers.withMessage('Not a valid VIN number', vinNumber) },
   partNumberObtained: { required },
-  roNumber: { requiredIfWarranty: helpers.withMessage('RO# is required when Warranty Exchange is Yes', requiredIf(() => props.isWarrantyExchange)) },
-  poNumber: { requiredIfCore: helpers.withMessage('PO# is required when Is Core is Yes', requiredIf(() => props.isCore)) },
+  roNumber: { requiredIfWarranty: helpers.withMessage('RO# is required when doing warranty exchanges', requiredIf(() => props.isWarrantyExchange)) },
+  poNumber: { requiredIfCore: helpers.withMessage('PO# is required when doing non-warranty exchanges', requiredIf(() => props.isCore)) },
   serviceManagerFullName: { requiredIfGoodwill: helpers.withMessage('Field is required when this is a Goodwill', requiredIf(() => props.isGoodwill)) },
 
   //deliveryDate: { requiredIfGoodwill: helpers.withMessage('Field is required when this is a Goodwill', requiredIf(() => props.isGoodwill)) },
@@ -486,8 +486,8 @@ const v$ = useVuelidate(rules, props);
         </Transition>
 
         <Transition>
-          <div class="col-12 col-xxl-4" v-if="props.orderType === OrderType.Exchange && isWarrantyExchange === true">
-            <label for="roNumber" class="form-label req">RO #</label>
+          <div class="col-12 col-xxl-4" v-if="props.orderType === OrderType.Exchange && (isWarrantyExchange === true || isCore === true)">
+            <label for="roNumber" class="form-label" :class="{req: props.orderType === OrderType.Exchange && isWarrantyExchange === true}">RO #</label>
             <input type="text" class="form-control" id="roNumber" name="roNumber" :value="roNumber"
               @input="$emit('update:roNumber', ($event.target as HTMLInputElement).value)" @blur="v$.roNumber.$touch" />
             <div class="input-errors" v-for="error of v$?.roNumber?.$errors" :key="error.$uid">
