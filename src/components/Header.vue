@@ -19,6 +19,7 @@ watch(() => route.meta.title, () => {
 
 let logoSrc = IS_TX_URL() ? 'logo-model-electronics-texas.svg' : 'logo-model-electronics.svg';
 
+
 </script>
 
 
@@ -111,6 +112,9 @@ let logoSrc = IS_TX_URL() ? 'logo-model-electronics-texas.svg' : 'logo-model-ele
                                 <RouterLink class="nav-link" to="/invoicehist"><span>Invoice History</span></RouterLink>
                             </li>
                             <li class="nav-item">
+                                <RouterLink class="nav-link" to="/partstatus"><span>Part Status</span></RouterLink>
+                            </li>    
+                            <li class="nav-item">
                                 <RouterLink class="nav-link" to="/nissandownloads"><span>Downloads</span></RouterLink>
                             </li>                          
                         </ul>
@@ -128,7 +132,9 @@ let logoSrc = IS_TX_URL() ? 'logo-model-electronics-texas.svg' : 'logo-model-ele
                     &nbsp;
                 </div>
                 <div class="logout-wrapper">
-                    <a href="" v-show="store.isAuthenticated()" @click="store.logout()" class="">Logout</a>
+                    <span style="cursor: pointer; color: white; text-decoration: underline; font-family: Inter-Bold;" class="logout-link"
+                    v-show="store.isAuthenticated()" @click="store.logout()">Logout</span>
+                    <!-- <a  v-show="store.isAuthenticated()" @click="store.logout()" class="">Logout</a> -->
                 </div>
             </div>
             <div>

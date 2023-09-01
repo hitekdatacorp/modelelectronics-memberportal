@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/auth-store';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
@@ -43,12 +44,43 @@ const router = createRouter({
       }
     },
     {
+      path: '/changepassword',
+      name: 'changepassword',
+      component: () => import('../views/ChangePasswordView.vue'),
+      meta: {
+        title: 'Change Password',
+        metaTags: [
+          {
+            name: 'Change Password Form',
+            content: 'The form/view for the user to change their password.'
+          }
+        ]
+      }
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
+    },
+    {
+      path: '/partstatus',
+      name: 'partstatus',
+      // route level code-splitting
+      // this generates a separate chunk (NissanPartStatusView.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/NissanPartStatusView.vue'),
+      meta: {
+        title: 'Part Status',
+        metaTags: [
+          {
+            name: 'Parts Status',
+            content: 'Shows the status of all nissan parts that are on back order.'
+          }
+        ]
+      },      
     },
     {
       path: '/clients',
@@ -303,6 +335,7 @@ router.beforeEach(async (to) => {
 
   // redirect to login page if not logged in and trying to access a restricted page
   const publicPages = ['/login', '/', '/about'];
+
   const authRequired = !publicPages.includes(to.path);
   const authStore = useAuthStore();
   if (authRequired && (!authStore.profile || !authStore.profile.token)) {
@@ -310,10 +343,18 @@ router.beforeEach(async (to) => {
     return '/';
   }
 
-  const accountingAccessPages = ['/invoicehist']; // the only pages that "Accounting" logins are allowed to access
-  if(authRequired && authStore.isAccountingLogin && !accountingAccessPages.includes(to.path)){
-    return '/invoicehist';
-  }
+  const nissanPages = ['/partstatus', '/nissandownloads', '/speedometer'];
+  const gmOrOtherPages = ['/clustersurvey', '/radiosurvey', '/repairform', '/advexchange'];
+
+  // do not let GM or Other dealers access nissan pages
+  // if(authStore.isGMOrOtherDealer && nissanPages.includes(to.path)) {
+  //   return '/advexchange';
+  // }
+
+  // // do not let Nissan dealers access GM or Other pages
+  // if(authStore.isNissanDealer && gmOrOtherPages.includes(to.path)) {
+  //   return '/speedometer';
+  // }
 });
 
 router.afterEach(async (to, from) => {

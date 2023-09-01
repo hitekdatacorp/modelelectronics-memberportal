@@ -10,11 +10,11 @@
       Click on links below to open or right-click to download (Save Link As...)      
     </div>
     <div class="pb-5">
-      <a href="/member/public/downloads/ITB11_053.pdf" target="_blank" class="btn btn-primary btn-download" >Download ITB11_053 form</a>
+      <a href="/member/downloads/ITB11_053.pdf" target="_blank" class="btn btn-primary btn-download" >Download ITB11_053 form</a>
     </div>   
 
     <div class="pb-5">
-      <a href="/member/public/downloads/Odometer_Ordering_Process.pdf" target="_blank" class="btn btn-primary btn-download" >Download Odometer Ordering Process form</a>
+      <a href="/member/downloads/Odometer_Ordering_Process.pdf" target="_blank" class="btn btn-primary btn-download" >Download Odometer Ordering Process form</a>
     </div>   
   </main>
 </template>

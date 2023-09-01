@@ -7,6 +7,7 @@ import axios from 'axios';
 
 export async function getClients(): Promise<Client[]> {    
     try {
+        
         const { data, status } = await http.get<Client[]>(`clients`);
         console.debug(`GetClients returned status: ${status}`);
 

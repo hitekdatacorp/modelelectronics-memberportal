@@ -46,6 +46,7 @@ export const useAuthStore = defineStore({
     isAccountingLogin: () => {
       return state.profile?.customer?.accountType == AccountTypes.Accounting;
     },
+    salesRep: (state) => state.profile?.customer?.salesRep,
     isGMDealer: () => {
       return state.profile?.customer?.dealerManufacturer === DealerRoles.GM;
     },
@@ -107,12 +108,15 @@ export const useAuthStore = defineStore({
       this.profile = null;
       this.returnUrl = null;
       localStorage.removeItem('user');
-      if(router !== null && router !== undefined){
-        router.push('/');
-      } else {
-        // try the window object
-        window.location.href = '/';
-      }
+
+      window.location.href = '/';
+
+      // if(router !== null && router !== undefined){
+      //   router.push('/');
+      // } else {
+      //   // try the window object
+        
+      // }
     },
 
     setReturnUrl(url: string) {
