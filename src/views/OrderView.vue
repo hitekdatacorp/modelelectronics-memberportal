@@ -79,7 +79,7 @@ let isLoading = ref(false);
 let searchResult = ref<ItemAvailabilityResult | null>(null);
 
 const loadSideBar = async () => {
-  let itemResult = await getItemAvailability(props.partNumber);
+  let itemResult = await getItemAvailability(props.partNumber, true);
   searchResult.value = itemResult;
 
   order.isRadio = itemResult.isRadio;

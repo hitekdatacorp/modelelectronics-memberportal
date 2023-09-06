@@ -29,26 +29,32 @@ const alternatesSearchResults = ref<Array<ItemAvailabilityResult>>([]);
 async function checkStock(e: Event) {
   e.preventDefault();
   console.log('checking stock...');
+  alternatesSearchResults.value = [];
   isLoading.value = true;
   try {
     partNumberSearched.value = partNumberSearchText.value;
-    let itemResult = await getItemAvailability(partNumberSearchText.value, false);
+    let itemResult = await getItemAvailability(partNumberSearchText.value, true); // true = include inventory check for second location (Texas for example)
+
     showSearchResult.value = true;
     searchResult.value = itemResult;
-
     isLoading.value = false;
 
-    if(!searchResult.value?.exchangeAvailability?.isInStock && searchResult.value?.alternateItems?.length){
-      // perform a 'getItemAvailability' lookup for each alternate item
-      isLoadingAlternates.value = true;
-      for(const partNumber of searchResult.value.alternateItems){
-        let altResult = await getItemAvailability(partNumber);
-        alternatesSearchResults.value.push(altResult);
+    // check to see if this part has stock available. if not then check to see if there are alternate items that are available.
+    if (!itemResult?.exchangeAvailability?.isInStock && itemResult?.alternateItems?.length) {
+
+      if (itemResult?.alternateItems?.length) {
+        // perform a 'getItemAvailability' lookup for each alternate item
+        isLoadingAlternates.value = true;
+        for (const partNumber of itemResult.alternateItems) {
+          let altResult = await getItemAvailability(partNumber);
+          alternatesSearchResults.value.push(altResult);
+        }
+        isLoadingAlternates.value = false;
+      } else {
+        alternatesSearchResults.value = [];
       }
-      isLoadingAlternates.value = false;
-    } else {
-      alternatesSearchResults.value = [];
-    }
+    } 
+
   } catch (err) {
 
   } finally {
@@ -68,7 +74,8 @@ async function checkStock(e: Event) {
           <div class="input-group mb-3">
             <!-- <label for="partNumber" class="form-label">Part Number</label> -->
             <input type="text" class="form-control" id="partNumber" aria-describedby="partNumberHelp"
-              aria-label="Enter a part number" v-model="partNumberSearchText" :placeholder="!store.isNissanDealer ? 'Enter a part number' : '(Include Hyphen in Part #. Eg:24820-75P03)'" />
+              aria-label="Enter a part number" v-model="partNumberSearchText"
+              :placeholder="!store.isNissanDealer ? 'Enter a part number' : '(Include Hyphen in Part #. Eg:24820-75P03)'" />
             <input type="submit" class="btn btn-primary input-group-text" value="Search" />
           </div>
         </form>
@@ -76,28 +83,31 @@ async function checkStock(e: Event) {
 
       <div class="row pb-2 pt-2" v-if="showSearchResult">
         <div class="col-12 search-results">
-          <h5 v-if="!searchResult?.itemExists">We couldn't find <b>part # {{partNumberSearched}}</b>            
+          <h5 v-if="!searchResult?.itemExists">We couldn't find <b>part # {{ partNumberSearched }}</b>
           </h5>
-          <h5 v-if="searchResult?.itemExists">We found 1 matching part</h5>          
+          <h5 v-if="searchResult?.itemExists">We found 1 matching part</h5>
         </div>
       </div>
 
       <div class="row ">
         <LoadingComponent v-if="isLoading" view-box="0 0 300 500"></LoadingComponent>
-        <PartCard v-bind:item-avail="searchResult" :showPurchaseAndExchangeButtons="true"></PartCard>       
+        <PartCard v-bind:item-avail="searchResult" :showPurchaseAndExchangeButtons="true"></PartCard>
       </div>
 
       <div class="row pt-4" v-if="showSearchResult">
-        <div class="col-12 search-results">         
-          <h5 class="alt-text" v-if="!searchResult?.exchangeAvailability?.isInStock && searchResult?.itemExists && searchResult.alternateItems?.length">If the top item is out of stock you may order any of the alternate parts listed below as well.</h5>
+        <div class="col-12 search-results">
+          <h5 class="alt-text"
+            v-if="!searchResult?.exchangeAvailability?.isInStock && searchResult?.itemExists && searchResult.alternateItems?.length">
+            If the top item is out of stock you may order any of the alternate parts listed below as well.</h5>
         </div>
       </div>
-      
-      
+
+
       <LoadingComponent v-if="isLoadingAlternates" view-box="0 0 300 500"></LoadingComponent>
       <div class="row pt-4" v-for="itemAvail in alternatesSearchResults">
-        
-        <PartCard  :key="itemAvail.item?.itemNumber" v-bind:item-avail="itemAvail" :show-purchase-and-exchange-buttons="true"></PartCard>
+
+        <PartCard :key="itemAvail.item?.itemNumber" v-bind:item-avail="itemAvail"
+          :show-purchase-and-exchange-buttons="true"></PartCard>
       </div>
 
     </div>
@@ -131,9 +141,8 @@ h5 {
 
 h5.alt-text {
   font-size: 1.3rem;
-    background-color: yellow;
-    padding: 15px;
-    font-size: 1.25rem;
-    
-}
-</style>
+  background-color: yellow;
+  padding: 15px;
+  font-size: 1.25rem;
+
+}</style>
