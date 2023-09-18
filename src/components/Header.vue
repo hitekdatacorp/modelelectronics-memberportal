@@ -84,10 +84,10 @@ let logoSrc = IS_TX_URL() ? 'logo-model-electronics-texas.svg' : 'logo-model-ele
                                 <RouterLink class="nav-link" to="/advexchange" v-if="!store.isAccountingLogin"><span>Advanced Exchange</span>
                                 </RouterLink>
                             </li>
-                            <li class="nav-item" v-if="IS_NJ_URL()">
+                            <!-- <li class="nav-item" v-if="IS_NJ_URL()">
                                 <RouterLink class="nav-link" to="/outrightpurchase" v-if="!store.isAccountingLogin"><span>Outright Purchase</span>
                                 </RouterLink>
-                            </li>
+                            </li> -->   
                             <li class="nav-item">
                                 <RouterLink class="nav-link" to="/invoicehist"><span>Invoice History</span></RouterLink>
                             </li>
@@ -143,6 +143,7 @@ let logoSrc = IS_TX_URL() ? 'logo-model-electronics-texas.svg' : 'logo-model-ele
             <div class="banner-page-title">
                 <div style="border-top: 4px solid #c40000;">&nbsp;</div>
                 <h1>{{pageHeader}}</h1>
+                <span></span>
             </div>
         </div>
     </header>

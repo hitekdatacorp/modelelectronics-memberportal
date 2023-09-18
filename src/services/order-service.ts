@@ -1,5 +1,5 @@
 
-import type {CreateOrderResult, IInvoiceHistoryModel, IOrderModel} from '../types/models';
+import type {CreateOrderResult, IInvoiceDownload, IInvoiceHistoryModel, IOrderModel} from '../types/models';
 import {http, httpWithoutInterceptors, IS_TX_URL} from '@/helpers/axiosconfig'
 import axios from 'axios';
 import _ from 'lodash';
@@ -145,6 +145,35 @@ export function getOrderInvoiceUrl(orderNumber: number, orderType: OrderType) {
     let url = `${VITE_INVOICEGENERATOR_URL}?wo=${orderNumber}&type=${t}`;
 
     return url;
+}
+
+export async function getOrderInvoiceUrlForDownload(orderNumber: number, orderType: OrderType){
+    let t: string;
+    switch(orderType){
+        case OrderType.Exchange:
+            t = 'E';
+            break;
+        case OrderType.Purchase:
+            t = 'S'
+            break;
+        default:
+            t = 'S';
+    }
+
+    try {
+        const { data, status } = await http.get<IInvoiceDownload>(`invoices?workOrderNumber=${orderNumber}&workOrderType=${t}`);
+        console.debug(`getOrderInvoiceUrlForDownload returned status: ${status}`);        
+
+        return data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            return Promise.reject(error.message);
+        } else {
+            console.log('unexpected error: ', error);
+            return Promise.reject('An unexpected error occurred');
+        }
+    }        
 }
 
 const VITE_INVOICE_TRACKING_URL_FORMAT_AIRBORN: string = import.meta.env.VITE_INVOICE_TRACKING_URL_FORMAT_AIRBORN;

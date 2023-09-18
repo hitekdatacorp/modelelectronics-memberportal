@@ -61,6 +61,35 @@ let replaceWithNoImageImg = function (orderNumber: string) {
 
 let currentSelectedOrderType = ref('');
 
+async function downloadInvoice(orderNumber: number, orderType: OrderType) {
+  try {
+    isLoading.value = true;
+    let result = await orderService.getOrderInvoiceUrlForDownload(orderNumber, orderType);
+
+    if (result) {
+
+      const anchor = document.createElement("a");
+      anchor.href = result.pdfUrl;
+      anchor.download = `invoice-${orderNumber}.pdf`;
+
+      document.body.appendChild(anchor);
+      anchor.target = '_blank';
+      anchor.click();
+      document.body.removeChild(anchor);
+
+      //window.open(result.pdfUrl, '_blank');
+    } else {
+      toast.error('Error downloading invoice.');
+    }
+
+    console.debug(result);
+  } catch (err) {
+    toast.error('Error downloading invoice.');
+  } finally {
+    isLoading.value = false;
+  }
+}
+
 async function onSubmit() {
   console.debug('On Submit called...')
 
@@ -326,8 +355,10 @@ async function onSubmit() {
 
               </div>
               <div class="col-xxl-3 d-flex justify-content-xl-right justify-content-center align-items-start" v-if="!store.isNissanDealer && order?.shipDate">
-                <a :href="orderService.getOrderInvoiceUrl(order?.orderNumber, orderType)"
-                  class="btn btn-primary btn-invoice" target="_blank">View Invoice</a>
+                <!-- <a :href="orderService.getOrderInvoiceUrl(order?.orderNumber, orderType)"
+                  class="btn btn-primary btn-invoice" target="_blank">View Invoice</a> -->
+                  <button @click="downloadInvoice(order?.orderNumber, orderType)"
+                  class="btn btn-primary btn-invoice">View Invoice</button>
               </div>
             </div>
           </div>
@@ -353,8 +384,7 @@ async function onSubmit() {
               <tr v-for="order of orderSearchResults" :key="order.orderNumber">
                 <th scope="row">{{ dateTimeToShortDateString(order.orderDate) }}</th>
                 <td v-if="store.isGMOrOtherDealer && order.shipDate">
-                  <a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)"
-                    target="_blank" >{{ order.orderNumber }}</a>                   
+                  <a href="" @click.prevent="downloadInvoice(order.orderNumber, orderType)">{{ order.orderNumber }}</a>                   
                 </td>
                 <td v-else>{{ order.orderNumber }}</td>
                 <td>{{ order.itemNumber }}</td>
@@ -367,9 +397,10 @@ async function onSubmit() {
                 }}</td>
                 <td><a :href="orderService.getOrderTrackingUrl(order.trackingNumber)"
                     target="_blank">{{ order.trackingNumber }}</a></td>
-                <td><a :href="orderService.getOrderInvoiceUrl(order.orderNumber, orderType)" target="_blank" v-if="!store.isNissanDealer && order.shipDate">
+                <td><button @click="downloadInvoice(order.orderNumber, orderType)" v-if="!store.isNissanDealer && order.shipDate"
+                  style="background-color: transparent; border:none">
                     <IconDocumentViewRed></IconDocumentViewRed>
-                  </a></td>
+                </button></td>
               </tr>
             </tbody>
           </table>

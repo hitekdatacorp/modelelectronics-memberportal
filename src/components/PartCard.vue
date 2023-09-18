@@ -120,12 +120,12 @@ async function purchasePart() {
         <div class="part-card-body">
             <div class="row pb-4">
                 <div class="col">
-                    <div class="row pb-4" v-show="itemAvail.exchangeAvailability?.isInStock || itemAvail.purchaseAvailability?.isInStock">
+                    <div class="row pb-4" v-show="itemAvail.exchangeAvailability?.isInStock">
                         <div class="col-12">
                             <InStockIcon :in-stock-message="availMessage" />
                         </div>
                     </div>
-                    <div class="row pb-4" v-show="!itemAvail.exchangeAvailability?.isInStock && !itemAvail.purchaseAvailability?.isInStock">
+                    <div class="row pb-4" v-show="!itemAvail.exchangeAvailability?.isInStock">
                         <div class="col-12">
                             <OutOfStockIcon />
                         </div>
@@ -189,7 +189,8 @@ async function purchasePart() {
                             v-show="itemAvail.exchangeAvailability?.partPriceMessage === null || itemAvail.exchangeAvailability?.partPriceMessage === ''">Exchange</button>
                     </div>
                 </div>
-                <div class="col-6 col-md-4">
+                <!-- We removed the ability to purchase at Model Electronics Request 2023-09-07 . Only Nissan dealers can purchase-->
+                <div class="col-6 col-md-4" v-if="store.isNissanDealer">
                     <label>PURCHASE PRICE</label>                    
                     <div class="price">{{ purchasePartPriceText }}</div>
                     <div v-if="showPurchaseAndExchangeButtons">

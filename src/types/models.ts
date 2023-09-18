@@ -303,3 +303,9 @@ export interface IBackOrderedPart {
     isOnBackorder: boolean;
     expectedDeliveryDate: Date | null;
 }
+
+export interface IInvoiceDownload {
+    pdfPath: string;
+    pdfFileName: string;
+    pdfUrl: string;
+}

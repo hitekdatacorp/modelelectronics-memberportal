@@ -33,7 +33,11 @@ async function checkStock(e: Event) {
   isLoading.value = true;
   try {
     partNumberSearched.value = partNumberSearchText.value;
-    let itemResult = await getItemAvailability(partNumberSearchText.value, true); // true = include inventory check for second location (Texas for example)
+
+    // only perform cross-site checks for non-nissan dealers
+    let shouldCheckCrossSiteInventory = store.isNissanDealer ? false : true;
+
+    let itemResult = await getItemAvailability(partNumberSearchText.value, shouldCheckCrossSiteInventory); // true = include inventory check for second location (Texas for example)
 
     showSearchResult.value = true;
     searchResult.value = itemResult;
