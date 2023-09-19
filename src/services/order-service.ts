@@ -124,29 +124,6 @@ export async function getOrderHistory(orderType: OrderType, customerNumber: stri
     }    
 }
 
-//const VITE_INVOICEGENERATOR_URL = import.meta.env.VITE_INVOICEGENERATOR_URL;
-
-const VITE_INVOICEGENERATOR_URL = IS_TX_URL() ? import.meta.env.VITE_INVOICEGENERATOR_URL_TEXAS : import.meta.env.VITE_INVOICEGENERATOR_URL;
-
-export function getOrderInvoiceUrl(orderNumber: number, orderType: OrderType) {
-
-    let t: string;
-    switch(orderType){
-        case OrderType.Exchange:
-            t = 'E';
-            break;
-        case OrderType.Purchase:
-            t = 'S'
-            break;
-        default:
-            t = 'S';
-    }
-
-    let url = `${VITE_INVOICEGENERATOR_URL}?wo=${orderNumber}&type=${t}`;
-
-    return url;
-}
-
 export async function getOrderInvoiceUrlForDownload(orderNumber: number, orderType: OrderType){
     let t: string;
     switch(orderType){

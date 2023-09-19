@@ -96,12 +96,12 @@ let showRestrictedMessage = function () {
         <div class="part-card-body" style="font-size: 0.8rem !important">
             <div class="row pb-4">
                 <div class="col">
-                    <div class="row pb-4" v-show="itemAvail.exchangeAvailability?.isInStock || itemAvail.purchaseAvailability?.isInStock">
+                    <div class="row pb-4" v-show="itemAvail.exchangeAvailability?.isInStock || (store.isNissanDealer && itemAvail.purchaseAvailability?.isInStock)">
                         <div class="col-12">
                             <InStockIcon :in-stock-message="availMessage" />
                         </div>
                     </div>
-                    <div class="row pb-4" v-show="!itemAvail.exchangeAvailability?.isInStock && !itemAvail.purchaseAvailability?.isInStock">
+                    <div class="row pb-4" v-show="!itemAvail.exchangeAvailability?.isInStock && (store.isNissanDealer && !itemAvail.purchaseAvailability?.isInStock)">
                         <div class="col-12">
                             <OutOfStockIcon />
                         </div>

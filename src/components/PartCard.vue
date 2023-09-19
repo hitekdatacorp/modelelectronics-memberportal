@@ -120,12 +120,12 @@ async function purchasePart() {
         <div class="part-card-body">
             <div class="row pb-4">
                 <div class="col">
-                    <div class="row pb-4" v-show="itemAvail.exchangeAvailability?.isInStock">
+                    <div class="row pb-4" v-show="itemAvail.exchangeAvailability?.isInStock || (store.isNissanDealer && itemAvail.purchaseAvailability?.isInStock)">
                         <div class="col-12">
                             <InStockIcon :in-stock-message="availMessage" />
                         </div>
                     </div>
-                    <div class="row pb-4" v-show="!itemAvail.exchangeAvailability?.isInStock">
+                    <div class="row pb-4" v-show="!itemAvail.exchangeAvailability?.isInStock && (store.isNissanDealer && !itemAvail.purchaseAvailability?.isInStock)">
                         <div class="col-12">
                             <OutOfStockIcon />
                         </div>

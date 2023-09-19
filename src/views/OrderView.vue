@@ -79,7 +79,11 @@ let isLoading = ref(false);
 let searchResult = ref<ItemAvailabilityResult | null>(null);
 
 const loadSideBar = async () => {
-  let itemResult = await getItemAvailability(props.partNumber, true);
+
+  // only perform cross-site checks for non-nissan dealers
+  let shouldCheckCrossSiteInventory = !store.isNissanDealer;
+
+  let itemResult = await getItemAvailability(props.partNumber, shouldCheckCrossSiteInventory);
   searchResult.value = itemResult;
 
   order.isRadio = itemResult.isRadio;

@@ -354,9 +354,7 @@ async function onSubmit() {
                 </div>
 
               </div>
-              <div class="col-xxl-3 d-flex justify-content-xl-right justify-content-center align-items-start" v-if="!store.isNissanDealer && order?.shipDate">
-                <!-- <a :href="orderService.getOrderInvoiceUrl(order?.orderNumber, orderType)"
-                  class="btn btn-primary btn-invoice" target="_blank">View Invoice</a> -->
+              <div class="col-xxl-3 d-flex justify-content-xl-right justify-content-center align-items-start" v-if="!store.isNissanDealer && order?.shipDate">                
                   <button @click="downloadInvoice(order?.orderNumber, orderType)"
                   class="btn btn-primary btn-invoice">View Invoice</button>
               </div>
