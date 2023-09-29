@@ -84,6 +84,3 @@ app.component('Datepicker', Datepicker);
 
 // mount the vue app
 app.mount('#app')
-
-//export const myAppReference = app;
-
