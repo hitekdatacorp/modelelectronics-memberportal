@@ -159,8 +159,9 @@ let showRestrictedMessage = function () {
                     <div class="price">{{exchangePartPriceText}}</div>
                 </div>
                 <div class="col-6 col-md-4">
-                    <label>PURCHASE PRICE</label>
-                    <div class="price">{{purchasePartPriceText}}</div>                   
+                    <!-- PA - we removed showing the purchase price for Nissan dealers at their own request -->
+                    <!-- <label>PURCHASE PRICE</label>                     -->
+                    <!-- <div class="price">{{ purchasePartPriceText }}</div> -->                
                 </div>
             </div>
         </div>

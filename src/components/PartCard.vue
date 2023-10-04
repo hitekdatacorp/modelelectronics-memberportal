@@ -190,8 +190,9 @@ async function purchasePart() {
                 </div>
                 <!-- We removed the ability to purchase at Model Electronics Request 2023-09-07 . Only Nissan dealers can purchase-->
                 <div class="col-6 col-md-4" v-if="store.isNissanDealer">
-                    <label>PURCHASE PRICE</label>                    
-                    <div class="price">{{ purchasePartPriceText }}</div>
+                    <!-- PA - we removed showing the purchase price for Nissan dealers at their own request -->
+                    <!-- <label>PURCHASE PRICE</label>                     -->
+                    <!-- <div class="price">{{ purchasePartPriceText }}</div> -->
                     <div v-if="showPurchaseAndExchangeButtons">
                         <button type="button" class="btn btn-secondary"
                             @click="purchasePart()"
