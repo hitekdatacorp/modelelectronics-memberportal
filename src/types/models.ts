@@ -67,13 +67,19 @@ export class CustomerModel {
     city: string;
     state: string;
     zip: string;
+
+    shippingAddress: string;
+    shippingCity: string;
+    shippingState: string;
+    shippingZip: string;
+
     salesTerritory: string;
     salesRep: string;
     dealerManufacturer: string;
     accountType: string;
 
     constructor(customerNumber: string, friendlyCustomerNumber: string, name: string, phone: string, contactName: string, email: string, 
-        address:string, city: string, state: string, zip: string, salesTerritory: string, salesRep: string, dealerManufacturer: string, accountType: string) {
+        address:string, city: string, state: string, zip: string, shippingAddress: string, shippingCity: string, shippingState: string, shippingZip: string, salesTerritory: string, salesRep: string, dealerManufacturer: string, accountType: string) {
         this.customerNumber = customerNumber;
         this.friendlyCustomerNumber = friendlyCustomerNumber;
         this.name = name;
@@ -85,6 +91,12 @@ export class CustomerModel {
         this.city = city;
         this.state = state;
         this.zip = zip;
+
+        this.shippingAddress = shippingAddress;
+        this.shippingCity = shippingCity;
+        this.shippingState = shippingState;
+        this.shippingZip = shippingZip;
+
         this.salesTerritory = salesTerritory;
         this.salesRep = salesRep;
         this.dealerManufacturer = dealerManufacturer;

@@ -39,10 +39,10 @@ export const useAuthStore = defineStore({
     name: (state) => state.profile?.customer?.name,
     email: (state) => state.profile?.customer?.email,
     phone: (state) => state.profile?.customer?.phone,
-    address: (state) => state.profile?.customer?.address,
-    city: (state) => state.profile?.customer?.city,
-    state: (state) => state.profile?.customer?.state,
-    zip: (state) => state.profile?.customer?.zip,
+    address: (state) => state.profile?.customer?.shippingAddress ?? state.profile?.customer?.address,
+    city: (state) => state.profile?.customer?.shippingCity ?? state.profile?.customer?.city,
+    state: (state) => state.profile?.customer?.shippingState ?? state.profile?.customer?.state,
+    zip: (state) => state.profile?.customer?.shippingZip ?? state.profile?.customer?.zip,
     isAccountingLogin: () => {
       return state.profile?.customer?.accountType == AccountTypes.Accounting;
     },
