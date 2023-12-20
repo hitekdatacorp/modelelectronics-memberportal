@@ -8,7 +8,7 @@ export function toCurrencyString(val: number) {
     return formatter.format(val);
 }
 
-export function dateTimeToShortDateString(date: Date | string | null): string | null{
+export function dateTimeToShortDateString(date: Date | string | null): string | null {
 
     if(date === null) return '';
 

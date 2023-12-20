@@ -18,11 +18,8 @@ import "vue-toastification/dist/index.css";
 
 //import { useAuthStore } from './stores/auth-store';
 import VueProgressBar from "@aacassandra/vue3-progressbar";
-
 import Datepicker from '@vuepic/vue-datepicker';
 import  vfmPlugin from 'vue-final-modal'
-
-
 
 // create our vue app
 const app = createApp(App);

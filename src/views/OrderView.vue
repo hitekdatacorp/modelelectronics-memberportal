@@ -25,7 +25,8 @@ import * as orderService from '@/services/order-service';
 
 const props = defineProps({
   partNumber: { required: true, type: String },
-  orderType: { required: true, type: String as PropType<OrderType> }
+  orderType: { required: true, type: String as PropType<OrderType> },
+  isWarrantyExchange: { required: false, type: Boolean}
 });
 
 
@@ -36,6 +37,7 @@ const router = useRouter();
 const order = reactive<OrderFormViewModel>({
   orderType: props.orderType,
   partNumber: props.partNumber,
+  isWarrantyExchange: props.isWarrantyExchange,
   dealerName: store.name!,
   dealerCode: store.customerNumber!,
   contactName: '',
@@ -103,8 +105,8 @@ onBeforeRouteUpdate((to, from) => {
 
 
 let purchasePartPriceText = computed(() => {
-  if (searchResult.value?.purchaseAvailability?.partPriceMessage) {
-    return searchResult.value?.purchaseAvailability?.partPriceMessage;
+  if (searchResult.value?.purchaseAvailability?.retailChargePriceMessage) {
+    return searchResult.value?.purchaseAvailability?.retailChargePriceMessage;
   } else if (searchResult.value?.item?.retailPrice) {
     return toCurrencyString(searchResult.value?.item.retailPrice || 0);
   }
@@ -131,7 +133,7 @@ function placeOrder(isFormValid: boolean) {
   }
 
   isLoading.value = true;
-  setTimeout(async () => {
+  setTimeout(async () => { // we use setTimeout to simulate a delay in the order being placed. this is so we can see the loading spinner in action.
 
     try {
       // create the order
@@ -195,7 +197,7 @@ function showCoreMessageHandler(showCore: boolean) {
 
     <div class="row">
       <div class="col-md-3 order-sidebar justify-content-center">
-        <PartCardMini v-bind:item-avail="searchResult"></PartCardMini>
+        <PartCardMini v-bind:item-avail="searchResult" :is-warranty-exchange="props.isWarrantyExchange"></PartCardMini>
       </div>
       <div class="col order-form-main">
 
@@ -208,13 +210,14 @@ function showCoreMessageHandler(showCore: boolean) {
             <span class="req-label">Required Field</span>
           </div>
           <LoadingComponentLarge v-if="isLoading" view-box="0 0 700 500"></LoadingComponentLarge>
-          <OrderForm v-show="!isLoading" :order-type="props.orderType" :part-number="props.partNumber"
+          <OrderForm v-show="!isLoading" :order-type="props.orderType" :part-number="props.partNumber" 
             :dealer-name="store.name!" :dealer-code="store.customerNumber!" :part-is-restricted="searchResult?.exchangeAvailability?.partIsRestricted ?? undefined"
+            v-model:is-warranty-exchange="order.isWarrantyExchange"
             v-model:contact-name="order.contactName"
             v-model:email-address="order.emailAddress" v-model:phone-number="order.phoneNumber"
             v-model:customer-name="order.customerName" v-model:mileage="order.mileage" v-model:vin="order.vin"
             v-model:part-number-obtained="order.partNumberObtained"
-            v-model:is-warranty-exchange="order.isWarrantyExchange" v-model:is-radio="order.isRadio"
+             v-model:is-radio="order.isRadio"
             v-model:is-media-stuck="order.isMediaStuck" v-model:is-core="order.isCore"
             v-model:is-goodwill="order.isGoodwill" v-model:po-number="order.poNumber" v-model:ro-number="order.roNumber"
             v-model:service-manager-full-name="order.serviceManagerFullName" v-model:delivery-date="order.deliveryDate"
@@ -250,7 +253,7 @@ function showCoreMessageHandler(showCore: boolean) {
           <p style="margin-top: 2em;">
           <div style="width: fit-content; margin: 0 auto;">
             <button type="button" class="btn btn-secondary" @click="purchasePart"
-              :disabled="searchResult?.purchaseAvailability?.partPriceMessage !== null && searchResult?.purchaseAvailability?.partPriceMessage !== ''">Purchase</button>
+              :disabled="searchResult?.purchaseAvailability?.retailChargePriceMessage !== null && searchResult?.purchaseAvailability?.retailChargePriceMessage !== ''">Purchase</button>
           </div>
           </p>
         </div>

@@ -11,7 +11,8 @@ import { useRouter } from 'vue-router';
 
 type Props = {
     itemAvail: ItemAvailabilityResult | null,
-    showPurchaseAndExchangeButtons?: boolean
+    showPurchaseAndExchangeButtons?: boolean,
+    isWarrantyExchange?: boolean | null
 }
 
 const props = defineProps<Props>();
@@ -58,20 +59,59 @@ let replaceWithNoImageImg = function(){
 }
 
 let exchangePartPriceText = computed(() => {
-    if (itemAvail.value?.exchangeAvailability?.partPriceMessage) {
-        return itemAvail.value?.exchangeAvailability.partPriceMessage;
-    } else if (itemAvail.value?.item?.price) {
-        return toCurrencyString(itemAvail.value?.item.price || 0);
+
+    if(props.isWarrantyExchange === true){
+        if (itemAvail.value?.exchangeAvailability?.serviceChargePriceMessage) {
+            return itemAvail.value?.exchangeAvailability.serviceChargePriceMessage;
+        } else if (itemAvail.value?.item?.servicePrice) {
+            return toCurrencyString(itemAvail.value?.item.servicePrice || 0);
+        }
+    } else if(props.isWarrantyExchange === false){
+        if (itemAvail.value?.exchangeAvailability?.partChargePriceMessage) {
+            return itemAvail.value?.exchangeAvailability.partChargePriceMessage;
+        } else if (itemAvail.value?.item?.partsPrice) {
+            return toCurrencyString(itemAvail.value?.item.partsPrice || 0);
+        }
     }
+
     return '';
 });
-let purchasePartPriceText = computed(() => {
-    if (itemAvail.value?.purchaseAvailability?.partPriceMessage) {
-        return itemAvail.value?.purchaseAvailability?.partPriceMessage;
+
+let showExchangeButton = computed(() => {
+    if(props.isWarrantyExchange === true){
+        if (itemAvail.value?.exchangeAvailability?.serviceChargePriceMessage) {
+            return false;
+        } else if (itemAvail.value?.item?.servicePrice) {
+            return true;
+        }
+    } else if(props.isWarrantyExchange === false){
+        if (itemAvail.value?.exchangeAvailability?.partChargePriceMessage) {
+            return false;
+        } else if (itemAvail.value?.item?.partsPrice) {
+            return true;
+        }
+    }
+
+    return true;
+});
+
+let purchasePartPriceText = computed(() => {   
+    if (itemAvail.value?.purchaseAvailability?.retailChargePriceMessage) {
+        return itemAvail.value?.purchaseAvailability?.retailChargePriceMessage;
     } else if (itemAvail.value?.item?.retailPrice) {
         return toCurrencyString(itemAvail.value?.item.retailPrice || 0);
     }
     return '';
+});
+
+let showPurchaseButton = computed(() => {
+    if (itemAvail.value?.purchaseAvailability?.retailChargePriceMessage) {
+        return false;
+    } else if (itemAvail.value?.item?.retailPrice) {
+        return true;
+    }
+
+    return false;
 });
 
 let showRestrictedMessage = function () {
@@ -84,7 +124,7 @@ async function exchangePart() {
 
     //router.push({ name: 'orderex', params: { partNumber: itemAvail.value?.item?.itemNumber, orderType: OrderType.Exchange } });
 
-    let url = `/advexchange/order/${OrderType.Exchange}/${itemAvail.value?.item?.itemNumber}/`;
+    let url = `/advexchange/order/${OrderType.Exchange}/${itemAvail.value?.item?.itemNumber}?isWarrantyExchange=${props.isWarrantyExchange}`;
     router.push(url);
 }
 
@@ -185,7 +225,7 @@ async function purchasePart() {
                     <div class="price">{{ exchangePartPriceText }}</div>
                     <div v-if="showPurchaseAndExchangeButtons"><button type="button" class="btn btn-primary"
                             @click="exchangePart()"
-                            v-show="itemAvail.exchangeAvailability?.partPriceMessage === null || itemAvail.exchangeAvailability?.partPriceMessage === ''">Exchange</button>
+                            v-show="showExchangeButton">Exchange</button>
                     </div>
                 </div>
                 <!-- We removed the ability to purchase at Model Electronics Request 2023-09-07 . Only Nissan dealers can purchase-->
@@ -196,7 +236,7 @@ async function purchasePart() {
                     <div v-if="showPurchaseAndExchangeButtons">
                         <button type="button" class="btn btn-secondary"
                             @click="purchasePart()"
-                            v-show="itemAvail.purchaseAvailability?.partPriceMessage === null || itemAvail.purchaseAvailability?.partPriceMessage === ''">Purchase</button>
+                            v-show="showPurchaseButton">Purchase</button>
                     </div>
                 </div>
             </div>

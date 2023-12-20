@@ -135,7 +135,11 @@ const router = createRouter({
           // when /advexchange/order is matched
           path: 'order/:orderType/:partNumber',
           name: 'orderex',
-          props: true,
+          props: route => ({
+            orderType: route.params.orderType,
+            partNumber: route.params.partNumber,
+            isWarrantyExchange: route.query.isWarrantyExchange === 'true'
+          }),
           component: () => import('../views/OrderView.vue'),
           children: [
             

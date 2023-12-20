@@ -128,7 +128,8 @@ export interface ItemModel {
     itemType: string;
     productCategory: string;
     partType: string;
-    price: number | null;
+    servicePrice: number | null;
+    partsPrice: number | null;
     retailPrice: number | null;
     replacementCost: number | null;
     itemStatusDescription: string | null;
@@ -175,8 +176,10 @@ export interface ItemAvailability {
     availabilityOrderType: OrderType;
     partIsAvailable: boolean;
     partDoesNotExistInWarehouse: boolean;
-    availableQuantity: number;
-    partPriceMessage: string;
+    availableQuantity: number;    
+    serviceChargePriceMessage: string;
+    partChargePriceMessage: string;
+    retailChargePriceMessage: string;
     partIsRestricted: boolean | null;
     partStatus: string;
     canOrder: boolean;
@@ -194,7 +197,7 @@ export interface IItemAvailabilityResult extends IBaseItemAvailabilityResult{
     purchaseAvailability: ItemAvailability;
     mileageToBeSetAtDealership: boolean;
     showOnBackorderMessage(): boolean;
-    showNoEtaMessage(): boolean;
+    showNoEtaMessage(): boolean;    
 }
 
 export class ItemAvailabilityResult extends BaseItemAvailabilityResult implements IItemAvailabilityResult{

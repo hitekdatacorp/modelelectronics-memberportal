@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 
-import { computed, reactive, ref, toRef, watch, getCurrentInstance } from 'vue';
+import { computed, reactive, ref, toRef, watch, getCurrentInstance, onMounted } from 'vue';
 import type { PropType } from 'vue';
 
 import NotificationCard from '@/components/NotificationCard.vue';
@@ -16,47 +16,10 @@ import { dateTimeToShortDateString } from '@/helpers/formatters';
 import { usPhoneNumber, vinNumber } from '@/helpers/validators';
 import StateDropdown from '@/components/StateDropdown.vue';
 
-// const props = defineProps<{
-//   orderType: OrderType,  
-//   partNumber: string,
-//   dealerName: string,
-//   dealerCode: string,
-//   contactName: string
-//   emailAddress: string
-//   phoneNumber: string,
-//   customerName: string,
-//   mileage: string,
-//   vin: string,
-//   partNumberObtained: string,
-//   isWarrantyExchange?: boolean,
-//   isCore?: boolean,
-//   isGoodwill?: boolean,
-//   roNumber: string,
-//   poNumber: string,
-//   serviceManagerFullName: string,
-//   deliveryDate?: Date,
-//   hours?: string,
-//   customerComplaint: string,
-//   address: string,
-//   city: string,
-//   state: string,
-//   zip: string,
-//   shippingMethod: string,
-//   comments?: boolean,
-//   isRadio?:  boolean,
-//   isMediaStuck?:  boolean,
-
-//   // the following fields are only for when the Media Is Stuck.
-//   customerMailingAddress: string,
-//   customerMailingCity: string,
-//   customerMailingState: string,
-//   customerMailingZip: string,
-// }>();
-
 const props = defineProps({
 
   orderType: { required: true, type: String as PropType<OrderType> },
-  partNumber: { required: true, type: String },
+  partNumber: { required: true, type: String },  
   dealerName: { required: true, type: String },
   dealerCode: { required: true, type: String },
   partIsRestricted: { required: false, type: Boolean },
@@ -91,8 +54,6 @@ const props = defineProps({
   customerMailingCity: { type: String, required: true },
   customerMailingState: { type: String, required: true },
   customerMailingZip: { type: String, required: true },
-
-
 });
 
 
@@ -130,6 +91,17 @@ const emit = defineEmits<{
   (e: 'update:customerMailingState', v: string): void,
   (e: 'update:customerMailingZip', v: string): void,
 }>();
+
+onMounted(() => {
+  
+  if(props.isWarrantyExchange === true){
+    updateIsWarrantyFieldHandler(true);  
+    document.getElementById('warrantyExchangeYes')?.click();
+  } else if(props.isWarrantyExchange === false){
+    updateIsWarrantyFieldHandler(false);
+    document.getElementById('warrantyExchangeNo')?.click();    
+  }
+});
 
 // Refs here
 const form = ref(null);
@@ -242,7 +214,7 @@ function clearFields() {
   emit('update:mileage', '');
   emit('update:vin', '');
   emit('update:partNumberObtained', '');
-  emit('update:isWarrantyExchange', false);
+  //emit('update:isWarrantyExchange', false);
   emit('update:isCore', false);
   emit('update:isGoodwill', false);
   emit('update:poNumber', '');
@@ -291,7 +263,7 @@ const rules = {
   vin: { vinNumber: helpers.withMessage('Not a valid VIN number', vinNumber) },
   partNumberObtained: { required },
   roNumber: { requiredIfWarranty: helpers.withMessage('RO# is required when doing warranty exchanges', requiredIf(() => props.isWarrantyExchange)) },
-  poNumber: { requiredIfCore: helpers.withMessage('PO# is required when doing non-warranty exchanges', requiredIf(() => props.isCore)) },
+  poNumber: { required },
   serviceManagerFullName: { requiredIfGoodwill: helpers.withMessage('Field is required when this is a Goodwill', requiredIf(() => props.isGoodwill)) },
 
   //deliveryDate: { requiredIfGoodwill: helpers.withMessage('Field is required when this is a Goodwill', requiredIf(() => props.isGoodwill)) },
@@ -473,9 +445,8 @@ const v$ = useVuelidate(rules, props);
           </div>
         </Transition>
 
-        <Transition>
-          <div class="col-md-12 col-lg-6 col-xl-4 col-xxl-3" 
-            v-if="(props.orderType === OrderType.Exchange && isCore === true) || (props.orderType === OrderType.Purchase)">
+        
+          <div class="col-md-12 col-lg-6 col-xl-4 col-xxl-3">
             <label for="poNumber" class="form-label req">PO #</label>
             <input type="text" class="form-control" id="poNumber" name="poNumber" :value="poNumber"
               @input="$emit('update:poNumber', ($event.target as HTMLInputElement).value)" @blur="v$.poNumber.$touch" />
@@ -483,7 +454,7 @@ const v$ = useVuelidate(rules, props);
               <div class="error-msg">{{ error.$message }}</div>
             </div>
           </div>
-        </Transition>
+        
 
         <Transition>
           <div class="col-12 col-xxl-4" v-if="props.orderType === OrderType.Exchange && (isWarrantyExchange === true || isCore === true)">
@@ -548,10 +519,10 @@ const v$ = useVuelidate(rules, props);
           <div class="col-sm-6 col-md-6 col-lg-2 col-xxl-2" v-if="isGoodwill === true">
             <label for="hours" class="form-label">Hours</label>
             <input type="text" class="form-control" id="hours" name="hours" :value="hours" placeholder="Cluster Only"
-              @input="$emit('update:hours', ($event.target as HTMLInputElement).value)" @blur="v$.hours.$touch" />
-            <div class="input-errors" v-for="error of v$?.hours?.$errors" :key="error.$uid">
+              @input="$emit('update:hours', ($event.target as HTMLInputElement).value)" />
+            <!-- <div class="input-errors" v-for="error of v$?.hours?.$errors" :key="error.$uid">
               <div class="error-msg">{{ error.$message }}</div>
-            </div>
+            </div> -->
           </div>
         </Transition>
       </div>

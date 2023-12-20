@@ -10,12 +10,14 @@ const router = useRouter();
 
 type AuthStoreState = {
   profile: UserProfile | null,
-  returnUrl: string | null
+  returnUrl: string | null,
+  showLoginMessage: boolean
 };
 
 const state: AuthStoreState = {
   profile: null,
-  returnUrl: null
+  returnUrl: null,
+  showLoginMessage: false
 };
 
 const profileFromLocalStorage = localStorage.getItem('user');
@@ -31,10 +33,13 @@ if(profileFromLocalStorage !== null){
   }
 }
 
+state.showLoginMessage = false;
+
 export const useAuthStore = defineStore({
   id: 'auth-store',
   state: () => (state),
   getters: {
+    getShowLoginMessage: (state) => state.showLoginMessage,
     customerNumber: (state) => state.profile?.customer?.friendlyCustomerNumber,
     name: (state) => state.profile?.customer?.name,
     email: (state) => state.profile?.customer?.email,
@@ -65,6 +70,11 @@ export const useAuthStore = defineStore({
     //returnUrl: (state) => state.returnUrl
   },  
   actions: {
+
+    setShowLoginMessage(show: boolean) {
+      this.showLoginMessage = show;
+    },
+
     async fetchCustomer(customerNumber: string): Promise<CustomerModel> {
       const user = await customerService.getCustomer(customerNumber);
       return user;

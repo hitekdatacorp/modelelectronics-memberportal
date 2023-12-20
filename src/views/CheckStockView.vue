@@ -19,8 +19,9 @@ const store = useAuthStore();
 let showSearchResult = ref(false);
 let partNumberSearchText = ref('');
 let partNumberSearched = ref('');
-
+let isWarrantyExchange = ref<boolean | null>(null);
 let searchResult = ref<ItemAvailabilityResult | null>(null);
+
 
 const isLoading = ref(false);
 const isLoadingAlternates = ref(false);
@@ -28,6 +29,17 @@ const alternatesSearchResults = ref<Array<ItemAvailabilityResult>>([]);
 
 async function checkStock(e: Event) {
   e.preventDefault();
+
+  if(!partNumberSearchText.value){
+    toast.error('Please enter a part number.');
+    return;
+  }
+
+  if(isWarrantyExchange.value === null){
+    toast.error('Please select if this is a warranty exchange.');
+    return;
+  }
+
   console.log('checking stock...');
   alternatesSearchResults.value = [];
   isLoading.value = true;
@@ -75,13 +87,44 @@ async function checkStock(e: Event) {
     <div class="container">
       <div class="row">
         <form @submit.prevent="checkStock">
-          <div class="input-group mb-3">
-            <!-- <label for="partNumber" class="form-label">Part Number</label> -->
-            <input type="text" class="form-control" id="partNumber" aria-describedby="partNumberHelp"
-              aria-label="Enter a part number" v-model="partNumberSearchText"
-              :placeholder="!store.isNissanDealer ? 'Enter a part number' : '(Include Hyphen in Part #. Eg:24820-75P03)'" />
-            <input type="submit" class="btn btn-primary input-group-text" value="Search" />
+          
+          <div class="row"> 
+            <div class="col mb-3" v-if="!store.isNissanDealer">
+              <!-- <label for="partNumber" class="form-label">Part Number</label> -->
+              <input type="text" class="form-control" id="partNumber" aria-describedby="partNumberHelp"
+                aria-label="Enter a part number" v-model="partNumberSearchText"
+                :placeholder="!store.isNissanDealer ? 'Enter a part number' : '(Include Hyphen in Part #. Eg:24820-75P03)'" />             
+            </div>
+            <div v-else class="input-group mb-3">
+              <input type="text" class="form-control" id="partNumber" aria-describedby="partNumberHelp"
+                aria-label="Enter a part number" v-model="partNumberSearchText"
+                :placeholder="!store.isNissanDealer ? 'Enter a part number' : '(Include Hyphen in Part #. Eg:24820-75P03)'" />  
+                <input type="submit" class="btn btn-primary input-group-text" value="Search" />        
+            </div>
           </div>
+
+          <div class="row" v-if="!store.isNissanDealer"> 
+            <div class="col mb-3">
+              <label for="warrantyExchange" class="form-label req">Is this a Warranty Exchange?</label> <br />
+              <div class="form-check form-check-inline form-radio-button">
+                <input type="radio" class="form-check-input" name="warrantyExchange" id="warrantyExchangeYes"
+                  autocomplete="off" :value="true" v-model="isWarrantyExchange" />
+                <label class="form-check-label" for="warrantyExchangeYes" style="padding: .5em 1em;">Yes</label>
+              </div>
+              <div class="form-check form-check-inline form-radio-button">
+                <input type="radio" class="form-check-input" name="warrantyExchange" id="warrantyExchangeNo"
+                  autocomplete="off" :value="false" v-model="isWarrantyExchange" />
+                <label class="form-check-label" for="warrantyExchangeNo" style="padding: .5em 1em;">No</label>
+              </div>             
+            </div>
+          </div>
+
+          <div class="row flex" v-if="!store.isNissanDealer"> 
+            <div class="col mb-3 d-flex justify-content-center">              
+              <input type="submit" class="btn btn-primary input-group-text" value="Search" />
+            </div>
+          </div>
+          
         </form>
       </div>
 
@@ -95,7 +138,7 @@ async function checkStock(e: Event) {
 
       <div class="row ">
         <LoadingComponent v-if="isLoading" view-box="0 0 300 500"></LoadingComponent>
-        <PartCard v-bind:item-avail="searchResult" :showPurchaseAndExchangeButtons="true"></PartCard>
+        <PartCard v-bind:item-avail="searchResult" :showPurchaseAndExchangeButtons="true" :isWarrantyExchange="isWarrantyExchange"></PartCard>
       </div>
 
       <div class="row pt-4" v-if="showSearchResult">
@@ -111,7 +154,7 @@ async function checkStock(e: Event) {
       <div class="row pt-4" v-for="itemAvail in alternatesSearchResults">
 
         <PartCard :key="itemAvail.item?.itemNumber" v-bind:item-avail="itemAvail"
-          :show-purchase-and-exchange-buttons="true"></PartCard>
+          :show-purchase-and-exchange-buttons="true" :isWarrantyExchange="isWarrantyExchange"></PartCard>
       </div>
 
     </div>
