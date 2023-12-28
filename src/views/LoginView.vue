@@ -6,8 +6,6 @@ import { useAuthStore } from '@/stores/auth-store';
 import router from '@/router';
 //import { useRouter } from 'vue-router';
 
-
-
 const toast = useToast();
 const store = useAuthStore();
 //const router = useRouter();
@@ -24,7 +22,6 @@ async function login(e: Event) {
   toast.success('Login successful!');
   customerNumber.value = '';
   password.value = '';
-
 
   if (response.userMustChangePassword) {
     console.debug('user must change password');
@@ -44,8 +41,11 @@ async function login(e: Event) {
     console.debug('going to advanced exchange page')
 
     if (!store.isNissanDealer) {
+      // temporary for the new year 2024.
+      store.setShowLoginMessage(true);
+      
       router.push('advexchange');
-    } else {
+    } else {      
       router.push('speedometer');
     }
 
