@@ -35,7 +35,7 @@ async function checkStock(e: Event) {
     return;
   }
 
-  if(isWarrantyExchange.value === null){
+  if(!store.isNissanDealer && isWarrantyExchange.value === null){
     toast.error('Please select if this is a warranty exchange.');
     return;
   }

@@ -111,7 +111,7 @@ let showPurchaseButton = computed(() => {
         return true;
     }
 
-    return false;
+    return true;
 });
 
 let showRestrictedMessage = function () {
