@@ -414,19 +414,31 @@ const v$ = useVuelidate(rules, props);
         </div>
         <div class="col-md-12 col-lg-6 col-xl-4" v-if="props.orderType === OrderType.Exchange">
           <label for="warrantyExchange" class="form-label req">Is this a Warranty Exchange?</label> <br />
-          <div class="form-check form-check-inline form-radio-button">
+
+          <div class="form-check form-check-inline form-radio-button" v-if="isWarrantyExchange">
+            <input type="radio" class="form-check-input" 
+              autocomplete="off"  />
+            <label class="form-check-label" style="padding: .5em 1em; background-color: #0041A3; color: white;">Yes</label>
+          </div>
+          <div class="form-check form-check-inline form-radio-button" v-if="!isWarrantyExchange">
+            <input type="radio" class="form-check-input" 
+              autocomplete="off"  />
+            <label class="form-check-label" style="padding: .5em 1em; background-color: #0041A3; color: white;">No</label>
+          </div>
+
+           <!-- <div class="form-check form-check-inline form-radio-button" >
             <input type="radio" class="form-check-input" name="warrantyExchange" id="warrantyExchangeYes"
-              autocomplete="off" :value="true" @change="updateIsWarrantyFieldHandler(true)" />
+              autocomplete="off" :value="true" @change="updateIsWarrantyFieldHandler(true)" disabled />
             <label class="form-check-label" for="warrantyExchangeYes" style="padding: .5em 1em;">Yes</label>
           </div>
           <div class="form-check form-check-inline form-radio-button">
             <input type="radio" class="form-check-input" name="warrantyExchange" id="warrantyExchangeNo"
-              autocomplete="off" :value="false" @change="updateIsWarrantyFieldHandler(false)" />
+              autocomplete="off" :value="false" @change="updateIsWarrantyFieldHandler(false)" disabled />
             <label class="form-check-label" for="warrantyExchangeNo" style="padding: .5em 1em;">No</label>
           </div>
           <div class="input-errors" v-for="error of v$?.isWarrantyExchange?.$errors" :key="error.$uid">
             <div class="error-msg">{{ error.$message }}</div>
-          </div>
+          </div>  -->
         </div>
         <Transition>
           <div class="col-md-6 col-lg-6 col-xl-3"

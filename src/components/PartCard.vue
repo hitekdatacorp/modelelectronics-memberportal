@@ -61,16 +61,16 @@ let replaceWithNoImageImg = function(){
 let exchangePartPriceText = computed(() => {
 
     if(props.isWarrantyExchange === true){
-        if (itemAvail.value?.exchangeAvailability?.serviceChargePriceMessage) {
-            return itemAvail.value?.exchangeAvailability.serviceChargePriceMessage;
-        } else if (itemAvail.value?.item?.servicePrice) {
-            return toCurrencyString(itemAvail.value?.item.servicePrice || 0);
-        }
-    } else if(props.isWarrantyExchange === false){
         if (itemAvail.value?.exchangeAvailability?.partChargePriceMessage) {
             return itemAvail.value?.exchangeAvailability.partChargePriceMessage;
         } else if (itemAvail.value?.item?.partsPrice) {
             return toCurrencyString(itemAvail.value?.item.partsPrice || 0);
+        }        
+    } else if(props.isWarrantyExchange === false){
+        if (itemAvail.value?.exchangeAvailability?.serviceChargePriceMessage) {
+            return itemAvail.value?.exchangeAvailability.serviceChargePriceMessage;
+        } else if (itemAvail.value?.item?.servicePrice) {
+            return toCurrencyString(itemAvail.value?.item.servicePrice || 0);
         }
     }
 
@@ -79,15 +79,15 @@ let exchangePartPriceText = computed(() => {
 
 let showExchangeButton = computed(() => {
     if(props.isWarrantyExchange === true){
-        if (itemAvail.value?.exchangeAvailability?.serviceChargePriceMessage) {
-            return false;
-        } else if (itemAvail.value?.item?.servicePrice) {
-            return true;
-        }
-    } else if(props.isWarrantyExchange === false){
         if (itemAvail.value?.exchangeAvailability?.partChargePriceMessage) {
             return false;
         } else if (itemAvail.value?.item?.partsPrice) {
+            return true;
+        }        
+    } else if(props.isWarrantyExchange === false){
+        if (itemAvail.value?.exchangeAvailability?.serviceChargePriceMessage) {
+            return false;
+        } else if (itemAvail.value?.item?.servicePrice) {
             return true;
         }
     }

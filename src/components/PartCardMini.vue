@@ -58,16 +58,16 @@ let availMessage = computed(() => {
 let exchangePartPriceText = computed(() => {
 
     if (props.isWarrantyExchange === true) {
-        if (itemAvail.value?.exchangeAvailability?.serviceChargePriceMessage) {
-            return itemAvail.value?.exchangeAvailability.serviceChargePriceMessage;
-        } else if (itemAvail.value?.item?.servicePrice) {
-            return toCurrencyString(itemAvail.value?.item.servicePrice || 0);
-        }
-    } else if (props.isWarrantyExchange === false) {
         if (itemAvail.value?.exchangeAvailability?.partChargePriceMessage) {
             return itemAvail.value?.exchangeAvailability.partChargePriceMessage;
         } else if (itemAvail.value?.item?.partsPrice) {
             return toCurrencyString(itemAvail.value?.item.partsPrice || 0);
+        }        
+    } else if (props.isWarrantyExchange === false) {
+        if (itemAvail.value?.exchangeAvailability?.serviceChargePriceMessage) {
+            return itemAvail.value?.exchangeAvailability.serviceChargePriceMessage;
+        } else if (itemAvail.value?.item?.servicePrice) {
+            return toCurrencyString(itemAvail.value?.item.servicePrice || 0);
         }
     }
 

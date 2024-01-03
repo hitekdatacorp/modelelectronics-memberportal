@@ -108,12 +108,13 @@ async function checkStock(e: Event) {
               <label for="warrantyExchange" class="form-label req">Is this a Warranty Exchange?</label> <br />
               <div class="form-check form-check-inline form-radio-button">
                 <input type="radio" class="form-check-input" name="warrantyExchange" id="warrantyExchangeYes"
-                  autocomplete="off" :value="true" v-model="isWarrantyExchange" />
+                  autocomplete="off" :value="true" v-model="isWarrantyExchange" 
+                   />
                 <label class="form-check-label" for="warrantyExchangeYes" style="padding: .5em 1em;">Yes</label>
               </div>
               <div class="form-check form-check-inline form-radio-button">
                 <input type="radio" class="form-check-input" name="warrantyExchange" id="warrantyExchangeNo"
-                  autocomplete="off" :value="false" v-model="isWarrantyExchange" />
+                  autocomplete="off" :value="false" v-model="isWarrantyExchange"  />
                 <label class="form-check-label" for="warrantyExchangeNo" style="padding: .5em 1em;">No</label>
               </div>             
             </div>
