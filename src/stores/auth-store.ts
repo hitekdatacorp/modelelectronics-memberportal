@@ -114,11 +114,16 @@ export const useAuthStore = defineStore({
       }
     },
 
-    logout() {
+    clearProfileAndLocalStorage(){
       this.profile = null;
-      this.returnUrl = null;
       localStorage.removeItem('user');
+    },
 
+    logout() {
+      
+      this.clearProfileAndLocalStorage();
+      
+      this.returnUrl = null;
       window.location.href = '/';
 
       // if(router !== null && router !== undefined){

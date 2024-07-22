@@ -16,10 +16,6 @@ watch(() => route.meta.title, () => {
 
 });
 
-
-let logoSrc = IS_TX_URL() ? 'logo-model-electronics-texas.svg' : 'logo-model-electronics.svg';
-
-
 </script>
 
 

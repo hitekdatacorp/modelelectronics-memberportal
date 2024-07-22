@@ -12,15 +12,15 @@ import { useAuthStore } from '@/stores/auth-store';
 const njSiteUrl = import.meta.env.VITE_NJ_SITE_URL;
 const txSiteUrl = import.meta.env.VITE_TX_SITE_URL;
 
-export const CURRENT_SITE_BASE_URL = window.location.origin; //import.meta.env.VITE_PUBLIC_SITE_URL;
+//export const CURRENT_SITE_BASE_URL = window.location.origin; //import.meta.env.VITE_PUBLIC_SITE_URL;
 
 
 export let IS_NJ_URL = () => {
-    return CURRENT_SITE_BASE_URL + '/' === njSiteUrl;
+    return window.location.origin + '/' === njSiteUrl;
 }
 
 export let IS_TX_URL = () => {
-    return CURRENT_SITE_BASE_URL + '/' === txSiteUrl;
+    return window.location.origin + '/' === txSiteUrl;
 }
 
 const axiosConfig = {
@@ -33,7 +33,7 @@ const axiosConfig = {
 export const http = axios.create(axiosConfig);
 
 http.interceptors.request.use( config => {    
-
+    
    // app.config.globalProperties.$Progress.start(); // for every request start  the progress bar    
 
     if(config && config.url && config.headers) {

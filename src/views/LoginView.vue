@@ -16,7 +16,16 @@ let password = ref('');
 async function login(e: Event) {
   e.preventDefault();
 
-  console.debug(`Entered login method. customer number is ${customerNumber.value}. password is ${password.value}.`);
+  if (!customerNumber.value || !password.value) {
+    toast.error('Please enter your customer number and password.');
+    return;
+  }
+
+  console.debug(`Entered login method. customer number is ${customerNumber.value}.`);
+
+  // logout first to clear any existing session
+  await store.clearProfileAndLocalStorage();
+
   // no try catch block needed because we handle our errors globally (see axios config)
   const response = await store.authenticate(customerNumber.value, password.value);
   toast.success('Login successful!');
